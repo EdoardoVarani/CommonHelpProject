@@ -1,4 +1,4 @@
-package Threads;
+package ServerPack;
 
 import ServerPack.Server;
 

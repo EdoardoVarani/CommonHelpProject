@@ -1,5 +1,7 @@
 package ClientPack;
 
+import UserPack.User;
+
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -12,6 +14,7 @@ public class Client {
     String host="localhost";
     BufferedReader input;
     BufferedWriter output;
+    User user;
 
 
     public void connect(){
@@ -41,6 +44,8 @@ public class Client {
         }
 
     }
+
+
 
     public void authenticate(String token){
 

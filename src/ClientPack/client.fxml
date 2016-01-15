@@ -10,7 +10,8 @@
             <children>
                 <Label id="connStateLabel" layoutX="268.0" layoutY="1.0" text="Connection state:" />
                 <Button fx:id="clientConnectButton" layoutX="35.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#connectNow" text="Connect do EdoServer" />
-                <Button fx:id="loginButton" layoutX="97.0" layoutY="156.0" mnemonicParsing="false" onMouseClicked="#loginNow" text="LOGIN" />
+                <Button fx:id="loginButton" layoutX="35.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#loginNow" text="LOGIN" />
+            <Button fx:id="registerButton" layoutX="136.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#registerAct" text="REGISTER" />
             </children></AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>

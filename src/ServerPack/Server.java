@@ -1,7 +1,5 @@
 package ServerPack;
 
-import Threads.AcceptorThread;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 

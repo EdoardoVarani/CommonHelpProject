@@ -1,7 +1,6 @@
-package Threads;
+package ServerPack;
 
 import ClientPack.ConnectedClient;
-import ServerPack.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;

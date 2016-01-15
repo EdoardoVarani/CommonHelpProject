@@ -23,7 +23,7 @@ public class ServerController {
 
 
     @FXML private void sendToAll(){}
-    @FXML private void connectNow(){
+    @FXML public void connectNow(){
         server = new Server(port);
         server.connect();
 

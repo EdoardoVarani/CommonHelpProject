@@ -1,6 +1,6 @@
 package ClientPack;
 
-import Threads.ClientThread;
+import ServerPack.ClientThread;
 import UserPack.User;
 
 import java.net.Socket;

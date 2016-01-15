@@ -13,6 +13,8 @@ public class ServerMain extends Application {
 
     ServerController serverController = new ServerController();
 
+
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         //Parent root = FXMLLoader.load(getClass().getResource("/socketserverfx/server.fxml"));
@@ -26,6 +28,7 @@ public class ServerMain extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
 
 
