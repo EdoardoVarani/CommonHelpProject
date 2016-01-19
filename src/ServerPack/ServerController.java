@@ -22,7 +22,10 @@ public class ServerController {
     private  ServerMain serverMain;
 
 
-    @FXML private void sendToAll(){}
+    @FXML private void sendToAll(){
+        String textall= textAll.getText();
+
+    }
     @FXML public void connectNow(){
         server = new Server(port);
         server.connect();

@@ -48,6 +48,7 @@ public class ClientController {
 
         System.out.println("in controller prima di creaclient()");
         clientMain.creaClient();
+        // ClientTask clientTask;
 
     }
 
@@ -71,7 +72,9 @@ public class ClientController {
 
         System.out.println("SENDDDDD");
 if (!textToSend.getText().equalsIgnoreCase("")){
-    client.sendMessageToServer(textToSend.getText());
+        clientMain.sendMessageToServer(textToSend.getText());
+   // client.sendMessageToServer(textToSend.getText());
+
 }
     }
     public void setMain(ClientMain main){

@@ -6,6 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.net.Socket;
+
 /**
  * Created by edoar on 11/01/2016.
  */
@@ -13,6 +17,10 @@ public class ClientMain extends Application {
 
   private  ClientController clientController;
     private Client client;
+    private BufferedWriter outClient;
+    private Socket clientSocket;
+    private Integer port =4321;
+    private ClientBoss clientBoss;
    // private ClientTask clientTask;
 
     public static void main(String[] args) {
@@ -38,10 +46,32 @@ public class ClientMain extends Application {
 
     public void creaClient(){
         System.out.println("in main dentro creaclient");
-        client=new Client();
+        try {
+            clientSocket = new Socket("localhost", port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        clientBoss = new ClientBoss(clientSocket,this);
+        clientBoss.start();
+       /* client=new Client();
+        client.setMain(this);
         client.connect();
         ClientTask clientTask=new ClientTask(this, client);
-        clientTask.start();
+        clientTask.start(); */
 
     }
+
+    public void sendMessageToServer(String msg){
+
+        System.out.println("from ClientMain: MEssage  "+msg);
+        try {
+
+           clientBoss.send(msg);
+        } catch (Exception e) {e.printStackTrace();}
+
+    }
+    public void setWriter(BufferedWriter outClient){
+        this.outClient=outClient;
+    }
+
 }
