@@ -1,6 +1,12 @@
 package ServerPack;
 
-import java.io.*;
+import UserPack.Signals;
+import UserPack.User;
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 
@@ -14,6 +20,8 @@ public class ClientThread extends Thread {
     private BufferedReader in;
     private String line;
     private PrintWriter output;
+    private User user;
+    private Signals sig;
 
     //CONSTRUCTOR
     public ClientThread(Socket clientSocket) {
@@ -32,6 +40,12 @@ public class ClientThread extends Thread {
                 while ((line=in.readLine()) != null) //Read from InputStream (Client OutputStream)
                 {
                     System.out.println(line+ " on socket:"+socket);
+                    Gson gson =new Gson();
+                    sig=gson.fromJson(line, Signals.class);
+                    if (sig.getCode().equalsIgnoreCase("TiDoUser")) {
+                        User user = sig.getUser();
+                        System.out.println(user);
+                    }
               /* if(line.startsWith("test")) {
                 System.out.println("E' UN TEEEEEEEEEEEEEEEEEEEEEEEEEEEEST");
             } */ //TODO: SWITCHONE

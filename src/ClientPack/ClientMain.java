@@ -1,5 +1,6 @@
 package ClientPack;
 
+import UserPack.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ import java.net.Socket;
 public class ClientMain extends Application {
 
   private  ClientController clientController;
+    private  RegisterController registerController;
     private BufferedWriter outClient;
     private Socket clientSocket;
     private Integer port =4321;
@@ -57,5 +59,30 @@ public class ClientMain extends Application {
     public void setWriter(BufferedWriter outClient){
         this.outClient=outClient;
     }
+    public void authenticate(String nickname, String password, String name, String surname){
 
+        User user= new User(nickname,password,name,surname);
+      //  clientBoss.setUser(user);
+        System.out.println("user: " +user.toString());
+        clientBoss.sendUserToServer(user);
+    }
+
+    public void CreateRegisterScreen() {
+        Parent root=null;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/ClientPack/register.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = new Stage();
+        stage.setTitle("EdoClient");
+        // primaryStage.getIcons().add(new Image("/Images/server.png"));
+        stage.setScene(new Scene(root, 500, 500));
+        registerController = loader.getController();
+        registerController.setMain(this);
+        stage.show();
+
+    }
 }

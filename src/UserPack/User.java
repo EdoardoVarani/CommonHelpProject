@@ -16,15 +16,14 @@ public class User {
     //PREFERENCES
 
 
-    public User(String nickname, String password, String username, String surname, ChronoLocalDate born ){
-        this.user=user;
+    public User(String nickname, String password, String username, String surname){
+        this.nickname=nickname;
+        this.password=password;
+        this.username=username;
+        this.surname=surname;
+      //  this.born=born;
     }
 
-
-    public void printUser(){
-        System.out.println("from printuser");
-        System.out.println(user);
-    }
 //GETTERS & SETTERS
 
     public String getPassword() {

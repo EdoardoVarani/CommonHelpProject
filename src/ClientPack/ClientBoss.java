@@ -1,5 +1,9 @@
 package ClientPack;
 
+import UserPack.Signals;
+import UserPack.User;
+import com.google.gson.Gson;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -12,13 +16,16 @@ public class ClientBoss extends Thread {
     private BufferedReader bufReader;
     private PrintWriter buffWriter;
     private String letto;
+    private Gson gson;
+
+
+    private User user;
 
     public ClientBoss(Socket clientSocket, ClientMain clientMain){
         this.clientSocket=clientSocket;
         this.clientMain=clientMain;
 
     }
-
     public void run(){
         try {
             bufReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -43,6 +50,23 @@ public class ClientBoss extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public void sendUserToServer(User user){
+        this.user=user;
+        Signals signal = new Signals("TiDoUser", user);
+        Gson gson = new Gson();
+        String json = gson.toJson(signal);
+        System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
+        buffWriter.println(json);
     }
 
 }
