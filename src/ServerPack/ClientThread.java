@@ -42,13 +42,14 @@ public class ClientThread extends Thread {
                     System.out.println(line+ " on socket:"+socket);
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
-                    if (sig.getCode().equalsIgnoreCase("TiDoUser")) {
-                        User user = sig.getUser();
-                        System.out.println(user);
-                    }
-              /* if(line.startsWith("test")) {
-                System.out.println("E' UN TEEEEEEEEEEEEEEEEEEEEEEEEEEEEST");
-            } */ //TODO: SWITCHONE
+
+                    switch (sig.getCode()) {
+                        case ("TiDoUser"): {
+                            user = sig.getUser();
+                            System.out.println("Era un user! Eccolo: "+ user);
+                            break;
+                        }
+                    }//CASE END
                 }
             }
         }
