@@ -20,13 +20,10 @@ import java.time.chrono.ChronoLocalDate;
 public class ClientController {
 
     private  boolean connected;
-    private Client client;
     private String host="localhost";
     private int port=4321;
     private boolean isConnected;
-
     private ClientMain clientMain;
-
     @FXML
     Button clientConnectButton;
     @FXML
@@ -42,14 +39,9 @@ public class ClientController {
     @FXML DatePicker bornPicker;
 
 
+    //EVENT LISTENERS
     @FXML  private void connectNow(){ //connect to main server
-     /*    client=new Client();
-        client.connect(); */
-
-        System.out.println("in controller prima di creaclient()");
         clientMain.creaClient();
-        // ClientTask clientTask;
-
     }
 
     @FXML private void loginNow(){}

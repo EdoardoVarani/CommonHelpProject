@@ -14,12 +14,15 @@ public class ConnectedClient {
     private Socket clientSocket;
     private User user=null;
 
-
-
+    //CONSTRUCTORS
     public ConnectedClient(ClientThread clientThread, Socket clientSocket){
         this.clientThread=clientThread;
         this.clientSocket=clientSocket;
         //Non posso inizializzare l'usr perchè me lo deve comunicare via buffer
+    }
+
+    public void sendmsg(String msg){
+        clientThread.send(msg);
     }
 
     //GETTERS & SETTERS

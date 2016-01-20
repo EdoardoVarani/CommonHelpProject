@@ -16,23 +16,17 @@ import java.net.Socket;
 public class ClientMain extends Application {
 
   private  ClientController clientController;
-    private Client client;
     private BufferedWriter outClient;
     private Socket clientSocket;
     private Integer port =4321;
     private ClientBoss clientBoss;
-   // private ClientTask clientTask;
+    private String hostname ="localhost";
 
     public static void main(String[] args) {
         launch(args);
     }
     @Override
     public void start(Stage primaryStage) throws Exception{
-       /*  Parent root = FXMLLoader.load(getClass().getResource("/ClientPack/client.fxml"));
-        primaryStage.setTitle("EdoClient v.0.1");
-        primaryStage.setScene(new Scene(root, 400, 300));
-        primaryStage.show(); */
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/ClientPack/client.fxml"));
         Parent root = loader.load();
@@ -44,28 +38,18 @@ public class ClientMain extends Application {
         primaryStage.show();
     }
 
-    public void creaClient(){
-        System.out.println("in main dentro creaclient");
+    public void creaClient(){ //
         try {
-            clientSocket = new Socket("localhost", port);
+            clientSocket = new Socket(hostname, port);  //ISTANZIO CLIENT SOCKET
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clientBoss = new ClientBoss(clientSocket,this);
+        clientBoss = new ClientBoss(clientSocket,this); //nuovo clientBoss, gli passo il client socket e il client main
         clientBoss.start();
-       /* client=new Client();
-        client.setMain(this);
-        client.connect();
-        ClientTask clientTask=new ClientTask(this, client);
-        clientTask.start(); */
-
     }
 
     public void sendMessageToServer(String msg){
-
-        System.out.println("from ClientMain: MEssage  "+msg);
         try {
-
            clientBoss.send(msg);
         } catch (Exception e) {e.printStackTrace();}
 

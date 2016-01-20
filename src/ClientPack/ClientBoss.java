@@ -11,6 +11,7 @@ public class ClientBoss extends Thread {
     private ClientMain clientMain;
     private BufferedReader bufReader;
     private PrintWriter buffWriter;
+    private String letto;
 
     public ClientBoss(Socket clientSocket, ClientMain clientMain){
         this.clientSocket=clientSocket;
@@ -19,17 +20,15 @@ public class ClientBoss extends Thread {
     }
 
     public void run(){
-        System.out.println("clientboss running.");
         try {
             bufReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             buffWriter = new PrintWriter(this.clientSocket.getOutputStream(),true);
-            System.out.println(buffWriter);
-
+            System.out.println("clientboss running and buffers online.");
         } catch (Exception e){e.printStackTrace();}
 
         while (true){
             try {
-                String letto =bufReader.readLine();
+                letto =bufReader.readLine();
                 System.out.println("ricevuto server message: "+letto);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -39,11 +38,8 @@ public class ClientBoss extends Thread {
     public void send(String msg)
     {
         try {
-            System.out.println("sono in clientBoss nella send, buffWrit: " +buffWriter);
-          //  this.buffWriter.write(msg);
             buffWriter.println(msg);
-
-            System.out.println(msg);
+            System.out.println("sended to server: "+msg);
         } catch (Exception e) {
             e.printStackTrace();
         }

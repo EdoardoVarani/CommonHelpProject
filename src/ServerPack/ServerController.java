@@ -8,33 +8,35 @@ import javafx.scene.control.TextField;
 /**
  * Created by edoar on 11/01/2016.
  */
-public class ServerController {
-@FXML
+public class ServerController{
+
+    private boolean isConnected=false;
+    private int port=4321;
+    private  ServerMain serverMain;
+
+    @FXML
     ListView recvListView;
     @FXML
     TextField textAll;
     @FXML
     Button sendAllButton, serverLogin, connectButton;
 
-    private boolean isConnected=false;
-    private int port=4321;
-    private Server server;
-    private  ServerMain serverMain;
-
 
     @FXML private void sendToAll(){
-        String textall= textAll.getText();
 
+        String textall= textAll.getText();
+        serverMain.sendToClients(textall); //main method, chiamerà la relativa send nell'acceptor
     }
     @FXML public void connectNow(){
-        server = new Server(port);
-        server.connect();
-
-
-        System.out.println("SERVER ONLINE");
+        serverMain.creaServer();
+        System.out.println("*********** SERVER ONLINE ************");
     }
+
     @FXML private void logAdminNow(){}
 
+    public void setMain(ServerMain serverMain){
+        this.serverMain=serverMain;
+    }
 }
 
 
