@@ -10,6 +10,8 @@ import java.net.Socket;
 /**
  * Created by edoar on 20/01/2016.
  */
+
+//CIAO
 public class ClientBoss extends Thread {
     private Socket clientSocket;
     private ClientMain clientMain;
