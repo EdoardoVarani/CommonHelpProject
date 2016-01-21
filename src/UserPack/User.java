@@ -1,16 +1,14 @@
 package UserPack;
 
-import java.time.chrono.ChronoLocalDate;
-
 /**
  * Created by edoar on 14/01/2016.
  */
 public class User {
+
     private String nickname;
     private String password;
     private String username;
     private String surname;
-    private ChronoLocalDate born;
     User user;
 
     //PREFERENCES
@@ -21,7 +19,6 @@ public class User {
         this.password=password;
         this.username=username;
         this.surname=surname;
-      //  this.born=born;
     }
 
 //GETTERS & SETTERS
@@ -40,6 +37,22 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
 }

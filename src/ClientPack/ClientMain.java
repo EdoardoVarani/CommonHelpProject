@@ -1,6 +1,7 @@
 package ClientPack;
 
 import UserPack.User;
+import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -61,15 +62,56 @@ public class ClientMain extends Application {
     }
 
     public void airplaineChanged(boolean airplaine){
-        clientBoss.airplaneChanged(airplaine);
+        Gson gson = new Gson();
+        String json = gson.toJson(airplaine);
+        clientBoss.airplaneChanged(json);
     }
     public void registerUser(String nickname, String password, String name, String surname){
 
-        //TODO: check sul db, se username già in uso segnala
-        User user= new User(nickname,password,name,surname);
-      //  clientBoss.setUser(user);
-        System.out.println("user: " +user.toString());
-        clientBoss.sendUserToServer(user);
+        /*
+        String nick=null;
+        Connection conn = null;
+        Statement stat = null;
+        ResultSet rs=null;
+        String driver = "com.mysql.jdbc.Driver";
+        String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
+        String dbUSR ="root";
+
+        try {
+            Class.forName(driver).newInstance();
+            conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);
+            stat = conn.createStatement();
+            rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nickname+"'");
+            while (rs.next()){
+                nick = rs.getString("nickname");
+            }
+            if (nick == null){
+                System.out.println("Utente valido!");
+            } else {
+                System.out.println("Utente "+nick +"già in uso");
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (!clientBoss.isNicknameAlredyTaked(nickname)) {
+            User user = new User(nickname, password, name, surname);
+            clientBoss.setUser(user);
+            System.out.println("user: " + user.toString());
+            Gson gson = new Gson();
+            String json = gson.toJson(user);
+            clientBoss.sendUserToServer(json);
+        } else System.out.println("Nickname già in uso"); */
+
+        User user = new User(nickname,password, name, surname);
+        Gson gson= new Gson();
+        String json = gson.toJson(user);
+        clientBoss.sendUserToServer(json);
     }
 
     public void CreateRegisterScreen() {

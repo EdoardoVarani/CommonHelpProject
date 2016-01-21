@@ -22,15 +22,15 @@ public class ServerController{
     Button sendAllButton, serverLogin, connectButton;
 
 
-    @FXML private void sendToAll(){
-
+    @FXML private void sendToAll(){ // invia messaggio a tutti quelli non in modalità aereo
         String textall= textAll.getText();
         serverMain.sendToClients(textall); //main method, chiamerà la relativa send nell'acceptor
         System.out.println("shouted to all in controller");
     }
-    @FXML public void connectNow(){
+    @FXML public void connectNow(){ //Start the Server.
         serverMain.creaServer();
-        System.out.println("*********** SERVER ONLINE ************");
+        System.out.println("*********** SERVER STARTED ************");
+        connectButton.setVisible(false);
     }
 
     @FXML private void logAdminNow(){}

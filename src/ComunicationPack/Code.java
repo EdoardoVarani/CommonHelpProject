@@ -6,6 +6,7 @@ package ComunicationPack;
     public final class Code {
     public static final String USERTOREGISTRATE = "usertoregistrate";
     public static final String AIRPLANESETTED = "airplainesetted";
+    public static final String CHECKIFNICKAMETAKED ="checkifnicknametacked";
 
     private Code(){
         throw new AssertionError();

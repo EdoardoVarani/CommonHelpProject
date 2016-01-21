@@ -2,6 +2,7 @@ package ServerPack;
 
 import ComunicationPack.Code;
 import ComunicationPack.Signals;
+import UserPack.SecurityClass;
 import UserPack.User;
 import com.google.gson.Gson;
 
@@ -9,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.*;
 
 
 /**
@@ -23,7 +25,7 @@ public class ClientThread extends Thread {
     private PrintWriter output;
     private User user;
     private Signals sig;
-
+    private  String checked;
 
     private boolean airplane;
 
@@ -44,20 +46,56 @@ public class ClientThread extends Thread {
                 while ((line=in.readLine()) != null) //Read from InputStream (Client OutputStream)
                 {
                     System.out.println(line+ " on socket:"+socket);
+
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
-
                     switch (sig.getCode()) {
                         case (Code.USERTOREGISTRATE): {
-                            user = sig.getUser();
+                            Gson gUser=new Gson();
+                            User userToCheck =gUser.fromJson(sig.getInfos(),User.class);
+                            String nameToCheck = userToCheck.getNickname();
+                            /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
+
+
+                            Connection conn = null; //TODO: MEGLIO APRIRE LA CONNESSIONE FUORI DAI CASE
+                            Statement stat = null;
+                            ResultSet rs=null;
+                            String driver = "com.mysql.jdbc.Driver";
+                            String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
+                            String dbUSR ="root";
+
+                            try {
+                                Class.forName(driver).newInstance();
+                                conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
+                                stat = conn.createStatement();
+                                rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'");
+                                while (rs.next()){
+                                   checked = rs.getString("nickname");
+                                }
+                                if (checked == null){
+                                    System.out.println("Utente valido!");
+                                    //TODO: sendJSON con il codice "USRVALIDO"
+                                } else {
+                                    System.out.println("Utente "+nameToCheck +"già in uso");
+                                }
+                            } catch (SQLException e){
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                             System.out.println("Era un user! Eccolo: "+ user);
                             break;
                         }
-                        case (Code.AIRPLANESETTED):{
-                            airplane =sig.getAirplane();
+                        case (Code.AIRPLANESETTED): {
+                            Gson gAirp = new Gson();
+                            airplane=gAirp.fromJson(sig.getInfos(),boolean.class);
                             System.out.println("Airplane: " +airplane);
                         }
-                    }//CASE END
+                    }//switch END
                 }
             }
         }

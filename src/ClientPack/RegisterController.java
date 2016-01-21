@@ -39,6 +39,7 @@ public class RegisterController {
         System.out.println("cognome: "+regSurn);
         System.out.println("Selected date: " + chronoDate);
        // isRegistering=true;
+
         clientMain.registerUser(regNick,regPwd,regName,regSurn);
     }
 

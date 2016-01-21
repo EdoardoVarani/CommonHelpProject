@@ -21,7 +21,7 @@ public class AcceptorThread extends Thread {
     @Override
     public void run() {
         while (true) {
-            System.out.println("Server is listening");
+            System.out.println("Server is listening...");
             try {
                 Socket socket = serverSocket.accept();//Establish a Socket conection with client;
                 System.out.println("connection accepted from :" + socket);
@@ -34,7 +34,7 @@ public class AcceptorThread extends Thread {
     }
     public void sendToClients(String msg){
         for (int i=0; i<connectedClients.size(); i++) {
-            if (connectedClients.get(i).getAirplane() == false) { //TODO: errore qui. Non si può fare?
+            if (connectedClients.get(i).getAirplane() == false) { //
                 connectedClients.get(i).sendmsg(msg);
             }
         }

@@ -56,7 +56,7 @@ public class ClientBoss extends Thread {
             e.printStackTrace();
         }
     }
-    public void airplaneChanged(boolean airp){
+    public void airplaneChanged(String airp){
 
         Signals sig = new Signals(Code.AIRPLANESETTED ,airp);
         Gson gson = new Gson();
@@ -73,13 +73,18 @@ public class ClientBoss extends Thread {
     public void setUser(User user) {
         this.user = user;
     }
-    public void sendUserToServer(User user){
-        this.user=user;
+    public void sendUserToServer(String user){
+
         Signals sig = new Signals(Code.USERTOREGISTRATE, user);
         Gson gson = new Gson();
         String json = gson.toJson(sig);
-        System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
+       // System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
         buffWriter.println(json);
+    }
+    boolean isNicknameAlredyTaked(String nickname){
+        Signals sig = new Signals(Code.CHECKIFNICKAMETAKED, nickname);
+        return false; //TODO: SISTEMARE
+
     }
 
 }
