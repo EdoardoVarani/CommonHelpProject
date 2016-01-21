@@ -12,6 +12,7 @@
                 <Button fx:id="clientConnectButton" layoutX="35.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#connectNow" text="Connect do EdoServer" />
                 <Button fx:id="loginButton" layoutX="35.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#loginNow" text="LOGIN" />
             <Button fx:id="registerButton" layoutX="136.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#registerAct" text="REGISTER" />
+            <CheckBox fx:id="airplane" layoutX="66.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#Aireplaine" text="Airplaine" />
             </children></AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>

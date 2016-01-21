@@ -12,6 +12,7 @@ import java.time.chrono.ChronoLocalDate;
  */
 public class RegisterController {
 
+   // private Boolean isRegistering=false;
     /** Register Pane @FMXL objects */
     @FXML
     TextField nicknameField;
@@ -37,8 +38,8 @@ public class RegisterController {
         System.out.println("nome:"+regName);
         System.out.println("cognome: "+regSurn);
         System.out.println("Selected date: " + chronoDate);
-
-        clientMain.authenticate(regNick,regPwd,regName,regSurn);
+       // isRegistering=true;
+        clientMain.registerUser(regNick,regPwd,regName,regSurn);
     }
 
     public void setMain(ClientMain main){

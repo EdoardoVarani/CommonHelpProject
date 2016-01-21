@@ -59,8 +59,13 @@ public class ClientMain extends Application {
     public void setWriter(BufferedWriter outClient){
         this.outClient=outClient;
     }
-    public void authenticate(String nickname, String password, String name, String surname){
 
+    public void airplaineChanged(boolean airplaine){
+        clientBoss.airplaneChanged(airplaine);
+    }
+    public void registerUser(String nickname, String password, String name, String surname){
+
+        //TODO: check sul db, se username già in uso segnala
         User user= new User(nickname,password,name,surname);
       //  clientBoss.setUser(user);
         System.out.println("user: " +user.toString());

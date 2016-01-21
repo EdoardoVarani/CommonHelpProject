@@ -1,6 +1,7 @@
 package ClientPack;
 
-import UserPack.Signals;
+import ComunicationPack.Code;
+import ComunicationPack.Signals;
 import UserPack.User;
 import com.google.gson.Gson;
 
@@ -11,7 +12,7 @@ import java.net.Socket;
  * Created by edoar on 20/01/2016.
  */
 
-//CIAO
+
 public class ClientBoss extends Thread {
     private Socket clientSocket;
     private ClientMain clientMain;
@@ -20,6 +21,8 @@ public class ClientBoss extends Thread {
     private String letto;
     private Gson gson;
 
+
+    boolean airp;
 
     private User user;
 
@@ -53,6 +56,14 @@ public class ClientBoss extends Thread {
             e.printStackTrace();
         }
     }
+    public void airplaneChanged(boolean airp){
+
+        Signals sig = new Signals(Code.AIRPLANESETTED ,airp);
+        Gson gson = new Gson();
+        String json = gson.toJson(sig);
+        buffWriter.println(json);
+
+    }
 
 
     public User getUser() {
@@ -64,9 +75,9 @@ public class ClientBoss extends Thread {
     }
     public void sendUserToServer(User user){
         this.user=user;
-        Signals signal = new Signals("TiDoUser", user);
+        Signals sig = new Signals(Code.USERTOREGISTRATE, user);
         Gson gson = new Gson();
-        String json = gson.toJson(signal);
+        String json = gson.toJson(sig);
         System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
         buffWriter.println(json);
     }

@@ -33,8 +33,17 @@ public class AcceptorThread extends Thread {
         }
     }
     public void sendToClients(String msg){
-        for (int i=0; i<connectedClients.size(); i++){
+        for (int i=0; i<connectedClients.size(); i++) {
+            if (connectedClients.get(i).getAirplane() == false) { //TODO: errore qui. Non si può fare?
+                connectedClients.get(i).sendmsg(msg);
+            }
+        }
+    }
+    public void sendToNotAirplane(String msg){
+        for (int i=0;i<connectedClients.size()-1;i++){
+          if (connectedClients.get(i).getClientThread().getAirplane()==false){
            connectedClients.get(i).sendmsg(msg);
+           }
         }
     }
 }

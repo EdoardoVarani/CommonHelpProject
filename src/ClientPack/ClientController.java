@@ -2,6 +2,7 @@ package ClientPack;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 /**
@@ -24,11 +25,19 @@ public class ClientController {
 
 
 
-    //EVENT LISTENERS
-    @FXML  private void connectNow(){ //connect to main server
-        clientMain.creaClient();
+
+
+    @FXML CheckBox airplane;
+    @FXML private void Aireplaine(){
+       airplane.isSelected();
+        clientMain.airplaineChanged(airplane.isSelected());
     }
 
+    //EVENT LISTENERS
+    @FXML  private void connectNow(){ //connect to main server
+
+        clientMain.creaClient();
+    }
     @FXML private void loginNow(){}
     @FXML private void registerAct(){
         /*

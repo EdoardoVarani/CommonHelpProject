@@ -26,6 +26,7 @@ public class ServerController{
 
         String textall= textAll.getText();
         serverMain.sendToClients(textall); //main method, chiamerà la relativa send nell'acceptor
+        System.out.println("shouted to all in controller");
     }
     @FXML public void connectNow(){
         serverMain.creaServer();

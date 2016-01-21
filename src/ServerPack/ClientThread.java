@@ -1,6 +1,7 @@
 package ServerPack;
 
-import UserPack.Signals;
+import ComunicationPack.Code;
+import ComunicationPack.Signals;
 import UserPack.User;
 import com.google.gson.Gson;
 
@@ -23,6 +24,9 @@ public class ClientThread extends Thread {
     private User user;
     private Signals sig;
 
+
+    private boolean airplane;
+
     //CONSTRUCTOR
     public ClientThread(Socket clientSocket) {
         this.socket = clientSocket;
@@ -44,10 +48,14 @@ public class ClientThread extends Thread {
                     sig=gson.fromJson(line, Signals.class);
 
                     switch (sig.getCode()) {
-                        case ("TiDoUser"): {
+                        case (Code.USERTOREGISTRATE): {
                             user = sig.getUser();
                             System.out.println("Era un user! Eccolo: "+ user);
                             break;
+                        }
+                        case (Code.AIRPLANESETTED):{
+                            airplane =sig.getAirplane();
+                            System.out.println("Airplane: " +airplane);
                         }
                     }//CASE END
                 }
@@ -66,4 +74,10 @@ public class ClientThread extends Thread {
             e.printStackTrace();
         }
     }
+
+    public  boolean getAirplane() {
+        System.out.println("aeroplano: "+airplane);
+        return airplane;
+    }
+
 }
