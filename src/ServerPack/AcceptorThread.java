@@ -39,11 +39,11 @@ public class AcceptorThread extends Thread {
             }
         }
     }
-    public void sendToNotAirplane(String msg){
+   /* public void sendToNotAirplane(String msg){
         for (int i=0;i<connectedClients.size()-1;i++){
           if (connectedClients.get(i).getClientThread().getAirplane()==false){
            connectedClients.get(i).sendmsg(msg);
            }
         }
-    }
+    } */
 }

@@ -46,7 +46,12 @@ public class ClientThread extends Thread {
                 while ((line=in.readLine()) != null) //Read from InputStream (Client OutputStream)
                 {
                     System.out.println(line+ " on socket:"+socket);
-
+                    Connection conn = null; //TODO: MEGLIO APRIRE LA CONNESSIONE FUORI DAI CASE
+                    Statement stat = null;
+                    ResultSet rs=null;
+                    String driver = "com.mysql.jdbc.Driver";
+                    String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
+                    String dbUSR ="root";
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
                     switch (sig.getCode()) {
@@ -55,14 +60,6 @@ public class ClientThread extends Thread {
                             User userToCheck =gUser.fromJson(sig.getInfos(),User.class);
                             String nameToCheck = userToCheck.getNickname();
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
-
-
-                            Connection conn = null; //TODO: MEGLIO APRIRE LA CONNESSIONE FUORI DAI CASE
-                            Statement stat = null;
-                            ResultSet rs=null;
-                            String driver = "com.mysql.jdbc.Driver";
-                            String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
-                            String dbUSR ="root";
 
                             try {
                                 Class.forName(driver).newInstance();
@@ -74,17 +71,22 @@ public class ClientThread extends Thread {
                                 }
                                 if (checked == null){
                                     System.out.println("Utente valido!");
-                                    //TODO: sendJSON con il codice "USRVALIDO"
+
+                                    this.user=userToCheck; //SE Valido, inizializzo il mio user.
+
+                                    Signals oknick= new Signals(Code.NICKNAMEFREE);
+                                    Gson okgson = new Gson();
+                                    String json = okgson.toJson(oknick);
+                                    output.println(json); //Sendo al client che il nick è libero
+                                    //TODO: sendJSON con il codice "USRVALIDO" e insert into users
                                 } else {
                                     System.out.println("Utente "+nameToCheck +"già in uso");
+                                    Signals nickBusy = new Signals(Code.NICKNAMEBUSY);
+                                    Gson busygson = new Gson();
+                                    String json = busygson.toJson(nickBusy);
+                                    output.println(json); //Sendo al Client che il nome è occupato.
                                 }
-                            } catch (SQLException e){
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            } catch (ClassNotFoundException e) {
+                            } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e){
                                 e.printStackTrace();
                             }
                             System.out.println("Era un user! Eccolo: "+ user);
@@ -94,6 +96,8 @@ public class ClientThread extends Thread {
                             Gson gAirp = new Gson();
                             airplane=gAirp.fromJson(sig.getInfos(),boolean.class);
                             System.out.println("Airplane: " +airplane);
+                            //TODO: update aereo in database
+                            break;
                         }
                     }//switch END
                 }

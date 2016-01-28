@@ -5,12 +5,10 @@ package ComunicationPack;
  */
 public class Signals {
 
-   /* private String code;
-    private String message;
-    private User user;
-    private Code myCode;
-*/
     private String code;
+    private String infos;
+
+
 
     public String getInfos() {
         return infos;
@@ -19,69 +17,23 @@ public class Signals {
     public void setInfos(String infos) {
         this.infos = infos;
     }
-/*
-    public boolean isAirplane() {
-        return airplane;
+
+    public Signals(String code){
+        this.code=code;
     }
-
-    public void setAirplane(boolean airplane) {
-        this.airplane = airplane;
-    } */
-
-    private String infos;
-
     public  Signals(String code, String infos){
         this.code=code;
         this.infos=infos;
     }
-/*
-    public boolean getAirplane() {
-        return airplane;
-    }
-
-    private boolean airplane;
-
-    public Signals(String code, User user){
-        this.code=code;
-        this.user=user;
-    }
-    public Signals(Code myCode, User user){
-        this.myCode=myCode;
-        this.user=user;
-    }
-    public Signals(String code, boolean airplane){
-        this.code=code;
-        this.airplane = airplane;
-    } */
-  //  public Signals(String code, String )
-
-
-/*
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    } */
 
     public String getCode() {
         return code;
     }
 
     public void setCode(String code) {
+
         this.code = code;
     }
-/*
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-*/
 
 
 }

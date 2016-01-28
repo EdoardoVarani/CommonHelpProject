@@ -20,7 +20,7 @@ public class ClientBoss extends Thread {
     private PrintWriter buffWriter;
     private String letto;
     private Gson gson;
-
+    private Signals sig;
 
     boolean airp;
 
@@ -38,10 +38,27 @@ public class ClientBoss extends Thread {
             System.out.println("clientboss running and buffers online.");
         } catch (Exception e){e.printStackTrace();}
 
-        while (true){
+        while (true){ //TODO: usare un flag bool da aggiornare su risposta del server alla query per il nuovo utente
             try {
                 letto =bufReader.readLine();
                 System.out.println("ricevuto server message: "+letto);
+                Gson gson =new Gson();
+                /** Segnale a singolo parametro per le risposte secche: es. userOccupato, a dopio parametro per passaggi di dati.*/
+                 sig = gson.fromJson(letto, Signals.class);
+                String code= sig.getCode();
+                System.out.println("IL CODICE: "+code);
+                switch (code){
+                    case (Code.NICKNAMEFREE): {
+                        System.out.println("il nick è libero");
+                        clientMain.setNicknameFree(true);
+                        break;
+                    }
+                    case (Code.NICKNAMEBUSY): {
+                        System.out.println("nickname già in uso.");
+                        clientMain.setNicknameFree(false);
+                        break;
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

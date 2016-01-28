@@ -15,6 +15,10 @@ public class ClientController {
     private int port=4321;
     private boolean isConnected;
     private ClientMain clientMain;
+
+
+
+    private boolean NickFree=false;
     @FXML
     Button clientConnectButton;
     @FXML
@@ -22,6 +26,7 @@ public class ClientController {
     @FXML Button sendButton;
     @FXML Button loginButton;
     @FXML Button registerButton;
+
 
 
 
