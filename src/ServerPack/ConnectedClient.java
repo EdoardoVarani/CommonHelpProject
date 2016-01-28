@@ -24,7 +24,7 @@ public class ConnectedClient {
     public void sendmsg(String msg){
         clientThread.send(msg);
     }
-    public  boolean getAirplane(){ //anche synchronized non funziona
+    public  boolean getAirplane(){
        return clientThread.getAirplane();
     }
 

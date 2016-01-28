@@ -26,12 +26,13 @@ public class ClientThread extends Thread {
     private User user;
     private Signals sig;
     private  String checked;
-
+    private ConnectedClient connectedClient;
     private boolean airplane;
 
     //CONSTRUCTOR
-    public ClientThread(Socket clientSocket) {
+    public ClientThread(Socket clientSocket, ConnectedClient connectedClient) {
         this.socket = clientSocket;
+        this.connectedClient=connectedClient;
     }
 
     public void run() {
@@ -46,7 +47,7 @@ public class ClientThread extends Thread {
                 while ((line=in.readLine()) != null) //Read from InputStream (Client OutputStream)
                 {
                     System.out.println(line+ " on socket:"+socket);
-                    Connection conn = null; //TODO: MEGLIO APRIRE LA CONNESSIONE FUORI DAI CASE
+                    Connection conn = null;
                     Statement stat = null;
                     ResultSet rs=null;
                     String driver = "com.mysql.jdbc.Driver";
@@ -65,20 +66,25 @@ public class ClientThread extends Thread {
                                 Class.forName(driver).newInstance();
                                 conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
                                 stat = conn.createStatement();
-                                rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'");
+                                rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
                                 while (rs.next()){
                                    checked = rs.getString("nickname");
                                 }
                                 if (checked == null){
                                     System.out.println("Utente valido!");
 
-                                    this.user=userToCheck; //SE Valido, inizializzo il mio user.
+                                    this.user=userToCheck; //SE Valido, inizializzo il mio user
+                                    connectedClient.setUser(user);
+
+                                    String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
+                                            "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname() +"')";
+                                    stat.executeUpdate(insert);//inserisce il nuovo utente
 
                                     Signals oknick= new Signals(Code.NICKNAMEFREE);
                                     Gson okgson = new Gson();
                                     String json = okgson.toJson(oknick);
                                     output.println(json); //Sendo al client che il nick è libero
-                                    //TODO: sendJSON con il codice "USRVALIDO" e insert into users
+
                                 } else {
                                     System.out.println("Utente "+nameToCheck +"già in uso");
                                     Signals nickBusy = new Signals(Code.NICKNAMEBUSY);

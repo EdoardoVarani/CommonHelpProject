@@ -103,14 +103,13 @@ public class ClientMain extends Application {
     public void setNicknameFree(boolean nicknameFree) {
         isNicknameFree = nicknameFree;
         if (nicknameFree){
-            System.out.println("NICK FREE IN CLIENTMAIN");
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     registerController.freeUser.setText("Nick Libero"); //TODO: RUNLATER
                     registerController.setNickFree(true);
                 }
-            });
+            }); //primarystage.close (in runlater)
 
             //BARACCA DEL TOGLI-TOGLI
         } else {
@@ -118,7 +117,6 @@ public class ClientMain extends Application {
               @Override
               public void run() {
                   registerController.setNickFree(false); //todo: runlater
-                  System.out.println("nella setNickname in main");
                   registerController.nicknameField.clear();
               }
           });
