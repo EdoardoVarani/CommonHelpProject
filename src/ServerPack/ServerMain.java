@@ -26,7 +26,7 @@ public class ServerMain extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("/socketserverfx/server.fxml"));
         FXMLLoader loader = new FXMLLoader();
        // Parent root=FXMLLoader.load(getClass().getResource("/ServerPack/server.fxml"));
-        loader.setLocation(getClass().getResource("/ServerPack/server.fxml"));
+        loader.setLocation(getClass().getResource("/GraphicPack/server.fxml"));
         Parent root=loader.load();
 
         primaryStage.setTitle("EdoServer v.0.1");

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane styleClass="tabber" stylesheets="@clientStyle.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientPack.ClientController">
+   <tabs>
+      <Tab text="Messagging">
+         <content>
+            <SplitPane dividerPositions="0.7939698492462312" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="449.0" prefWidth="677.0" styleClass="messagging">
+                <items>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                        <children>
+                            <Label id="connStateLabel" layoutX="268.0" layoutY="1.0" text="Connection state:" />
+                            <Button fx:id="clientConnectButton" layoutX="35.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#connectNow" text="Connect do EdoServer" />
+                            <Button fx:id="loginButton" layoutX="35.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#loginNow" text="LOGIN" />
+                        <Button fx:id="registerButton" layoutX="136.0" layoutY="184.0" mnemonicParsing="false" onMouseClicked="#registerAct" text="REGISTER" />
+                        <CheckBox fx:id="airplane" layoutX="66.0" layoutY="280.0" mnemonicParsing="false" onMouseClicked="#Aireplaine" text="AirPlane mode" textFill="WHITE" />
+                        </children>
+                  </AnchorPane>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                        <children>
+                            <TextField fx:id="textToSend" layoutX="14.0" layoutY="24.0" prefHeight="39.0" prefWidth="292.0" text="TEXT TO SEND: " />
+                            <Button fx:id="sendButton" layoutX="313.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#sendText" prefHeight="39.0" prefWidth="112.0" text="SEND" />
+                        </children>
+                  </AnchorPane>
+                </items>
+            </SplitPane>
+         </content>
+      </Tab>
+       <Tab text="Edit Preferences">
+        <content>
+        </content>
+         <content>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ToggleButton layoutX="101.0" layoutY="71.0" mnemonicParsing="false" text="ToggleButton" />
+                  <CheckBox layoutX="112.0" layoutY="184.0" mnemonicParsing="false" text="CheckBox" />
+               </children>
+            </Pane>
+         </content>
+       </Tab>
+   </tabs>
+</TabPane>

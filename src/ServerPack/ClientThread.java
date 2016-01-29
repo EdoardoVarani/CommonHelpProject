@@ -56,12 +56,12 @@ public class ClientThread extends Thread {
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
                     switch (sig.getCode()) {
+
                         case (Code.USERTOREGISTRATE): {
                             Gson gUser=new Gson();
                             User userToCheck =gUser.fromJson(sig.getInfos(),User.class);
                             String nameToCheck = userToCheck.getNickname();
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
-
                             try {
                                 Class.forName(driver).newInstance();
                                 conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
@@ -72,19 +72,15 @@ public class ClientThread extends Thread {
                                 }
                                 if (checked == null){
                                     System.out.println("Utente valido!");
-
                                     this.user=userToCheck; //SE Valido, inizializzo il mio user
                                     connectedClient.setUser(user);
-
                                     String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
                                             "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname() +"')";
                                     stat.executeUpdate(insert);//inserisce il nuovo utente
-
                                     Signals oknick= new Signals(Code.NICKNAMEFREE);
                                     Gson okgson = new Gson();
                                     String json = okgson.toJson(oknick);
                                     output.println(json); //Sendo al client che il nick è libero
-
                                 } else {
                                     System.out.println("Utente "+nameToCheck +"già in uso");
                                     Signals nickBusy = new Signals(Code.NICKNAMEBUSY);

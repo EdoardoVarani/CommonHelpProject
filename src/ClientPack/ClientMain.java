@@ -34,7 +34,7 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/ClientPack/client.fxml"));
+        loader.setLocation(getClass().getResource("/GraphicPack/client.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("EdoClient");
        // primaryStage.getIcons().add(new Image("/Images/server.png"));
@@ -80,7 +80,7 @@ public class ClientMain extends Application {
     public void CreateRegisterScreen() {
         Parent root=null;
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/ClientPack/register.fxml"));
+        loader.setLocation(getClass().getResource("/GraphicPack/clientRegister.fxml"));
         try {
             root = loader.load();
         } catch (IOException e) {

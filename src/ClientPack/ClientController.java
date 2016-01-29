@@ -45,21 +45,7 @@ public class ClientController {
     }
     @FXML private void loginNow(){}
     @FXML private void registerAct(){
-        /*
-        Parent root=null;
-        try {
-            root= FXMLLoader.load(getClass().getResource("register.fxml"));//launch register form
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = new Stage();
-        stage.setTitle("Registrazione Utente");
-        if (root!=null)
-        { stage.setScene(new Scene(root, 450, 450));
-        stage.show();}
-        */
         clientMain.CreateRegisterScreen();
-
     }
 
     @FXML private void sendText(){
@@ -67,8 +53,6 @@ public class ClientController {
         System.out.println("SENDDDDD");
 if (!textToSend.getText().equalsIgnoreCase("")){
         clientMain.sendMessageToServer(textToSend.getText());
-   // client.sendMessageToServer(textToSend.getText());
-
 }
     }
     public void setMain(ClientMain main){

@@ -34,7 +34,7 @@ public class AcceptorThread extends Thread {
     }
     public void sendToClients(String msg){
         for (int i=0; i<connectedClients.size(); i++) {
-            if (connectedClients.get(i).getAirplane() == false) { //
+            if (!connectedClients.get(i).getAirplane()) { //
                 connectedClients.get(i).sendmsg(msg);
             }
         }
