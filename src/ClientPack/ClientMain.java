@@ -19,6 +19,8 @@ import java.net.Socket;
 public class ClientMain extends Application {
 
   private  ClientController clientController;
+
+
     private  RegisterController registerController;
     private BufferedWriter outClient;
     private Socket clientSocket;
@@ -26,6 +28,7 @@ public class ClientMain extends Application {
     private ClientBoss clientBoss;
     private String hostname ="localhost";
     private boolean isNicknameFree=false;
+    public Stage registerStage;
 
 
     public static void main(String[] args) {
@@ -77,6 +80,7 @@ public class ClientMain extends Application {
         clientBoss.sendUserToServer(json);
     }
 
+
     public void CreateRegisterScreen() {
         Parent root=null;
         FXMLLoader loader = new FXMLLoader();
@@ -86,13 +90,17 @@ public class ClientMain extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Stage stage = new Stage();
-        stage.setTitle("EdoClient");
+        registerStage = new Stage();
+        registerStage.setTitle("EdoClient");
         // primaryStage.getIcons().add(new Image("/Images/server.png"));
-        stage.setScene(new Scene(root, 500, 500));
+        registerStage.setScene(new Scene(root, 500, 500));
         registerController = loader.getController();
         registerController.setMain(this);
-        stage.show();
+        registerStage.show();
+
+    }
+
+    public void updatePrefences(){
 
     }
 
@@ -108,6 +116,9 @@ public class ClientMain extends Application {
                 public void run() {
                     registerController.freeUser.setText("Nick Libero"); //TODO: RUNLATER
                     registerController.setNickFree(true);
+                    registerStage.hide();
+                    registerStage.close();
+                    clientController.welcomeLabel.setText("Ciao,"+clientBoss.getUser().getNickname());
                 }
             }); //primarystage.close (in runlater)
 

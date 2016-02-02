@@ -21,6 +21,7 @@ public class ConnectedClient {
         //Non posso inizializzare l'usr perchè me lo deve comunicare via buffer
     }
 
+
     public void sendmsg(String msg){
         clientThread.send(msg);
     }

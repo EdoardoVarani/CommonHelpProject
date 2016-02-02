@@ -25,7 +25,8 @@ public class AcceptorThread extends Thread {
             try {
                 Socket socket = serverSocket.accept();//Establish a Socket conection with client;
                 System.out.println("connection accepted from :" + socket);
-                connectedClients.add(new ConnectedClient(new ClientThread(socket,this.connectedClients.get(connectedClients.size()-1)),socket)); //add to my mapped connected clients;
+               // connectedClients.add(new ConnectedClient(new ClientThread(socket,this.connectedClients.get(connectedClients.size()-1)),socket)); //add to my mapped connected clients;
+                  connectedClients.add(new ConnectedClient(new ClientThread(socket),socket));
                    connectedClients.get(connectedClients.size()-1).getClientThread().start(); //start single ClientThread
             } catch (IOException e) {
                 e.printStackTrace();

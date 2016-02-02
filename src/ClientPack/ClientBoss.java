@@ -51,6 +51,8 @@ public class ClientBoss extends Thread {
                     case (Code.NICKNAMEFREE): {
                         System.out.println("il nick è libero");
                         clientMain.setNicknameFree(true);
+                        Gson json = new Gson();
+                        user= json.fromJson(sig.getInfos(),User.class);
                         break;
                     }
                     case (Code.NICKNAMEBUSY): {
@@ -75,7 +77,7 @@ public class ClientBoss extends Thread {
     }
     public void airplaneChanged(String airp){
 
-        Signals sig = new Signals(Code.AIRPLANESETTED ,airp);
+        Signals sig = new Signals(Code.AIRPLANESETTED ,airp); //wrap in json
         Gson gson = new Gson();
         String json = gson.toJson(sig);
         buffWriter.println(json);

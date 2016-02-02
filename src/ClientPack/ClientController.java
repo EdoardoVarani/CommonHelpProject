@@ -1,8 +1,10 @@
 package ClientPack;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -26,6 +28,11 @@ public class ClientController {
     @FXML Button sendButton;
     @FXML Button loginButton;
     @FXML Button registerButton;
+    @FXML
+    Label welcomeLabel;
+    @FXML
+    JFXButton prefSendButton;
+
 
 
 
@@ -58,6 +65,11 @@ if (!textToSend.getText().equalsIgnoreCase("")){
     public void setMain(ClientMain main){
         this.clientMain=main;
 
+    }
+
+    @FXML private void changePrefs(){
+        clientMain.updatePrefences();//nlabla.isSelected...
+        //TODO: senda le preferences al server
     }
 
 }

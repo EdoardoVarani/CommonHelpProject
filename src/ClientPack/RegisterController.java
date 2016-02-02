@@ -1,5 +1,6 @@
 package ClientPack;
 
+import com.jfoenix.controls.JFXPasswordField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,11 +14,12 @@ public class RegisterController {
     /** Register Pane @FMXL objects */
     @FXML
     TextField nicknameField;
-    @FXML TextField passwordField;
     @FXML TextField nameField;
     @FXML TextField surnameField;
     @FXML
     Label freeUser;
+    @FXML
+    JFXPasswordField passwordField;
     boolean nickFree;
     public void setNickFree(boolean nickFree) {
         this.nickFree = nickFree;

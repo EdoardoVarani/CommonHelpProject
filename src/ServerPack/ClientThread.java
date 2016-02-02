@@ -34,7 +34,9 @@ public class ClientThread extends Thread {
         this.socket = clientSocket;
         this.connectedClient=connectedClient;
     }
-
+    public ClientThread(Socket clientsocket){
+        this.socket=clientsocket;
+    }
     public void run() {
         try { //APRO I BUFFERS PER OGNI NUOVO CLIENT
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -61,27 +63,34 @@ public class ClientThread extends Thread {
                             Gson gUser=new Gson();
                             User userToCheck =gUser.fromJson(sig.getInfos(),User.class);
                             String nameToCheck = userToCheck.getNickname();
+                            System.out.println("Nickname da controllare: "+nameToCheck);
+
+                            //TODO: BUG: se submitto il register con un nick già in uso,
+                            //la prima volta mi risponde bene. Se dopo metto un nick valido, al query mi torna comunque qualcosa =! null
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
                             try {
                                 Class.forName(driver).newInstance();
                                 conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
                                 stat = conn.createStatement();
                                 rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
+                   // DEBUG
+                                System.out.println("ho fatto la query.");
                                 while (rs.next()){
                                    checked = rs.getString("nickname");
                                 }
                                 if (checked == null){
                                     System.out.println("Utente valido!");
                                     this.user=userToCheck; //SE Valido, inizializzo il mio user
-                                    connectedClient.setUser(user);
+                                 //   connectedClient.setUser(user);
                                     String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
                                             "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname() +"')";
                                     stat.executeUpdate(insert);//inserisce il nuovo utente
-                                    Signals oknick= new Signals(Code.NICKNAMEFREE);
+                                    Signals oknick= new Signals(Code.NICKNAMEFREE, sig.getInfos());
                                     Gson okgson = new Gson();
                                     String json = okgson.toJson(oknick);
                                     output.println(json); //Sendo al client che il nick è libero
                                 } else {
+                                    System.out.println("ecco il queryed:"+checked);
                                     System.out.println("Utente "+nameToCheck +"già in uso");
                                     Signals nickBusy = new Signals(Code.NICKNAMEBUSY);
                                     Gson busygson = new Gson();
