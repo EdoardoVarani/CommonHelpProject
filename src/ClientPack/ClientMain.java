@@ -1,5 +1,6 @@
 package ClientPack;
 
+import UserPack.Preferences;
 import UserPack.User;
 import com.google.gson.Gson;
 import javafx.application.Application;
@@ -18,17 +19,23 @@ import java.net.Socket;
  */
 public class ClientMain extends Application {
 
-  private  ClientController clientController;
+    private Preferences prefs;
 
-
+    private  ClientController clientController;
     private  RegisterController registerController;
+    private LoginController loginController;
+
     private BufferedWriter outClient;
     private Socket clientSocket;
     private Integer port =4321;
     private ClientBoss clientBoss;
     private String hostname ="localhost";
     private boolean isNicknameFree=false;
+
+    private boolean isClientLogged=false;
+    /** STAGES */
     public Stage registerStage;
+    public Stage loginStage;
 
 
     public static void main(String[] args) {
@@ -77,11 +84,18 @@ public class ClientMain extends Application {
         User user = new User(nickname,password, name, surname);
         Gson gson= new Gson();
         String json = gson.toJson(user);//impacchetto user
-        clientBoss.sendUserToServer(json);
+        clientBoss.sendToServerForRegistration(json);
     }
 
+    public void loginUser(String nickname, String password){
+        User user= new User(nickname,password); //LOGGING_USER
+        Gson gson= new Gson();
+        String json = gson.toJson(user);
+        clientBoss.sendToServerForLogin(json);
+      //  clientBoss.sendToServerForRegistration(json);
+    }
 
-    public void CreateRegisterScreen() {
+    public void createRegisterScreen() {
         Parent root=null;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/GraphicPack/clientRegister.fxml"));
@@ -99,8 +113,36 @@ public class ClientMain extends Application {
         registerStage.show();
 
     }
+    public void createLoginScreen(){
+        Parent root=null;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/GraphicPack/clientLogin.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        loginStage = new Stage();
+        loginStage.setTitle("EdoClient");
+        // primaryStage.getIcons().add(new Image("/Images/server.png"));
+        loginStage.setScene(new Scene(root, 500, 500));
+        loginController = loader.getController();
+        loginController.setClientMain(this);
+        loginStage.show();
 
-    public void updatePrefences(){
+    }
+
+    public void updatePrefences(boolean scuola,boolean making, boolean religione,
+                                boolean promozione_territorio, boolean donazione_sangue,
+                                boolean anziani, boolean tasse){
+
+        prefs= new Preferences(scuola,making,religione,promozione_territorio,donazione_sangue,
+                anziani,tasse);
+        prefs.setUser(clientBoss.getUser());
+        Gson gson= new Gson();
+        String json= gson.toJson(prefs);
+        clientBoss.updatePrefs(json);
+
 
     }
 
@@ -114,7 +156,7 @@ public class ClientMain extends Application {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    registerController.freeUser.setText("Nick Libero"); //TODO: RUNLATER
+                    registerController.freeUser.setText("Nick Libero");
                     registerController.setNickFree(true);
                     registerStage.hide();
                     registerStage.close();
@@ -127,11 +169,31 @@ public class ClientMain extends Application {
           Platform.runLater(new Runnable() {
               @Override
               public void run() {
-                  registerController.setNickFree(false); //todo: runlater
+                  registerController.setNickFree(false);
                   registerController.nicknameField.clear();
               }
           });
         }
+    }
+
+
+    public boolean isClientLogged() {
+        return isClientLogged;
+    }
+
+    public void setClientLogged(boolean clientLogged) {
+        isClientLogged = clientLogged;
+
+    }
+    public void rejectUser(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                loginController.nickLogin.clear();
+                loginController.loginText.setText("Combinazione User-Password inesistente.");
+            }
+        });
+
     }
 
 

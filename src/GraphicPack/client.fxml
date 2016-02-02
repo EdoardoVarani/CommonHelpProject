@@ -56,13 +56,13 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXCheckBox contentDisplay="RIGHT" prefHeight="27.0" prefWidth="90.0" />
-                        <JFXCheckBox contentDisplay="CENTER" prefHeight="27.0" prefWidth="60.0" textAlignment="CENTER" GridPane.rowIndex="1" />
-                        <JFXCheckBox GridPane.rowIndex="2" />
-                        <JFXCheckBox GridPane.rowIndex="3" />
-                        <JFXCheckBox GridPane.rowIndex="4" />
-                        <JFXCheckBox GridPane.rowIndex="5" />
-                        <JFXCheckBox GridPane.rowIndex="6" />
+                        <JFXCheckBox fx:id="scuolaBox" contentDisplay="RIGHT" prefHeight="27.0" prefWidth="90.0" />
+                        <JFXCheckBox fx:id="makingBox" contentDisplay="CENTER" prefHeight="27.0" prefWidth="60.0" textAlignment="CENTER" GridPane.rowIndex="1" />
+                        <JFXCheckBox fx:id="religioneBox" GridPane.rowIndex="2" />
+                        <JFXCheckBox fx:id="promozione_territorioBox" GridPane.rowIndex="3" />
+                        <JFXCheckBox fx:id="donazione_sangueBox" GridPane.rowIndex="4" />
+                        <JFXCheckBox fx:id="anzianiBox" GridPane.rowIndex="5" />
+                        <JFXCheckBox fx:id="tasseBox" GridPane.rowIndex="6" />
                         <Label prefHeight="27.0" prefWidth="242.0" text="Label" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>

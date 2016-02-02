@@ -1,6 +1,7 @@
 package ClientPack;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -33,6 +34,8 @@ public class ClientController {
     @FXML
     JFXButton prefSendButton;
 
+    @FXML
+    JFXCheckBox scuolaBox, makingBox, religioneBox, promozione_territorioBox, donazione_sangueBox, anzianiBox, tasseBox;
 
 
 
@@ -50,9 +53,11 @@ public class ClientController {
 
         clientMain.creaClient();
     }
-    @FXML private void loginNow(){}
+    @FXML private void loginNow(){
+        clientMain.createLoginScreen();
+    }
     @FXML private void registerAct(){
-        clientMain.CreateRegisterScreen();
+        clientMain.createRegisterScreen();
     }
 
     @FXML private void sendText(){
@@ -68,7 +73,11 @@ if (!textToSend.getText().equalsIgnoreCase("")){
     }
 
     @FXML private void changePrefs(){
-        clientMain.updatePrefences();//nlabla.isSelected...
+        System.out.println("Premuto changeprefs");
+        clientMain.updatePrefences(scuolaBox.isSelected(), makingBox.isSelected(),
+                religioneBox.isSelected(),
+                promozione_territorioBox.isSelected(),donazione_sangueBox.isSelected(),
+                anzianiBox.isSelected(),tasseBox.isSelected());//nlabla.isSelected...
         //TODO: senda le preferences al server
     }
 

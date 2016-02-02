@@ -60,6 +60,11 @@ public class ClientBoss extends Thread {
                         clientMain.setNicknameFree(false);
                         break;
                     }
+                    case (Code.WRONGUSER):{
+                        System.out.println("Nessun utente corrispondente.");
+                        //clientMain.setClientLogged(false);
+                        clientMain.rejectUser();
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -84,15 +89,15 @@ public class ClientBoss extends Thread {
 
     }
 
-
-    public User getUser() {
-        return user;
+    public void updatePrefs(String prefs){
+        Signals sig = new Signals(Code.UPDATEPREFS, prefs);
+        Gson gson = new Gson();
+        String json = gson.toJson(sig);
+        buffWriter.println(json);
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-    public void sendUserToServer(String user){
+
+    public void sendToServerForRegistration(String user){
 
         Signals sig = new Signals(Code.USERTOREGISTRATE, user);
         Gson gson = new Gson();
@@ -100,10 +105,23 @@ public class ClientBoss extends Thread {
        // System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
         buffWriter.println(json);
     }
+    public void sendToServerForLogin(String user){
+        Signals sig = new Signals(Code.USERTOLOGIN, user);
+        Gson gson = new Gson();
+        String json= gson.toJson(sig);
+        buffWriter.println(json);
+    }
     boolean isNicknameAlredyTaked(String nickname){
         Signals sig = new Signals(Code.CHECKIFNICKAMETAKED, nickname);
         return false; //TODO: SISTEMARE
 
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

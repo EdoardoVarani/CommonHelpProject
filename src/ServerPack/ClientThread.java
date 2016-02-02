@@ -2,6 +2,7 @@ package ServerPack;
 
 import ComunicationPack.Code;
 import ComunicationPack.Signals;
+import UserPack.Preferences;
 import UserPack.SecurityClass;
 import UserPack.User;
 import com.google.gson.Gson;
@@ -23,10 +24,12 @@ public class ClientThread extends Thread {
     private BufferedReader in;
     private String line;
     private PrintWriter output;
-    private User user;
     private Signals sig;
     private  String checked;
     private ConnectedClient connectedClient;
+
+    private User user;
+    private Preferences prefs;
     private boolean airplane;
 
     //CONSTRUCTOR
@@ -63,25 +66,20 @@ public class ClientThread extends Thread {
                             Gson gUser=new Gson();
                             User userToCheck =gUser.fromJson(sig.getInfos(),User.class);
                             String nameToCheck = userToCheck.getNickname();
-                            System.out.println("Nickname da controllare: "+nameToCheck);
 
-                            //TODO: BUG: se submitto il register con un nick già in uso,
-                            //la prima volta mi risponde bene. Se dopo metto un nick valido, al query mi torna comunque qualcosa =! null
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
                             try {
                                 Class.forName(driver).newInstance();
                                 conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
                                 stat = conn.createStatement();
                                 rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
-                   // DEBUG
-                                System.out.println("ho fatto la query.");
                                 while (rs.next()){
                                    checked = rs.getString("nickname");
                                 }
-                                if (checked == null){
+                                if (checked==null){
                                     System.out.println("Utente valido!");
                                     this.user=userToCheck; //SE Valido, inizializzo il mio user
-                                 //   connectedClient.setUser(user);
+                                   // connectedClient.setUser(user);
                                     String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
                                             "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname() +"')";
                                     stat.executeUpdate(insert);//inserisce il nuovo utente
@@ -90,12 +88,12 @@ public class ClientThread extends Thread {
                                     String json = okgson.toJson(oknick);
                                     output.println(json); //Sendo al client che il nick è libero
                                 } else {
-                                    System.out.println("ecco il queryed:"+checked);
                                     System.out.println("Utente "+nameToCheck +"già in uso");
                                     Signals nickBusy = new Signals(Code.NICKNAMEBUSY);
                                     Gson busygson = new Gson();
                                     String json = busygson.toJson(nickBusy);
-                                    output.println(json); //Sendo al Client che il nome è occupato.
+                                    output.println(json);//Sendo al Client che il nome è occupato.
+                                    checked=null;
                                 }
                             } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e){
                                 e.printStackTrace();
@@ -108,6 +106,38 @@ public class ClientThread extends Thread {
                             airplane=gAirp.fromJson(sig.getInfos(),boolean.class);
                             System.out.println("Airplane: " +airplane);
                             //TODO: update aereo in database
+                            break;
+                        }
+                        case (Code.UPDATEPREFS): {
+                            Gson gPrefs = new Gson();
+                            prefs = gPrefs.fromJson(sig.getInfos(),Preferences.class);
+                            System.out.println("ECCO LE PREFERENZE AGGIORNATE di" +prefs.getUser());
+                            break;
+                        }
+                        case (Code.USERTOLOGIN): {
+                            Gson glog= new Gson();
+                            User usrTologin = glog.fromJson(sig.getInfos(), User.class);
+                            System.out.println("USR TO LOGIN: "+usrTologin);
+                            try {
+                                Class.forName(driver).newInstance();
+                                conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
+                                stat = conn.createStatement();
+                                rs = stat.executeQuery("SELECT nickname FROM utente WHERE nickname='"+usrTologin.getNickname()+"' AND password='"+usrTologin.getPassword()+"'");
+                                while (rs.next()){
+                                    checked = rs.getString("nickname");
+                                }
+                                if (checked==usrTologin.getNickname()){
+                                    System.out.println("utente"+checked+ "riconosciuto.");
+                                    //TODO: RACCOGLI GLI ALTRI DATI UTENTE E LE PREFERENZE E MANDALE AL CLIENT
+                                }
+                                else {
+                                    Signals noUserSig = new Signals(Code.WRONGUSER);
+                                    Gson wrongGson = new Gson();
+                                    String json= wrongGson.toJson(noUserSig, Signals.class);
+                                    output.println(json);
+
+                                }
+                            } catch (SQLException e){e.printStackTrace();}
                             break;
                         }
                     }//switch END

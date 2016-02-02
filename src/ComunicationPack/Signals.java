@@ -18,7 +18,7 @@ public class Signals {
         this.infos = infos;
     }
 
-    public Signals(String code){
+    public Signals(String code){ //Per i segnali che non richiedono contenuto informativo aggiuntivo
         this.code=code;
     }
     public  Signals(String code, String infos){

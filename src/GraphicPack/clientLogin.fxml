@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientPack.LoginController">
+   <children>
+      <JFXTextField fx:id="nickLogin" layoutX="14.0" layoutY="76.0" />
+      <JFXPasswordField fx:id="pwdLogin" layoutX="14.0" layoutY="134.0" />
+      <JFXButton fx:id="loginNow" layoutX="88.0" layoutY="207.0" onMouseClicked="#loginClicked" text="LOGIN" />
+      <JFXSlider layoutX="56.0" layoutY="260.0" prefHeight="0.0" prefWidth="140.0" />
+      <Label fx:id="loginText" layoutX="18.0" layoutY="49.0" text="Login using your Nickname" />
+   </children>
+</AnchorPane>
