@@ -28,6 +28,7 @@ public class ClientThread extends Thread {
     private  String checked;
     private ConnectedClient connectedClient;
 
+    private Connection conn = null;
     private User user;
     private Preferences prefs;
     private boolean airplane;
@@ -44,6 +45,11 @@ public class ClientThread extends Thread {
         try { //APRO I BUFFERS PER OGNI NUOVO CLIENT
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(),true);
+            String driver = "com.mysql.jdbc.Driver";
+            String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
+            String dbUSR ="root";
+            Class.forName(driver).newInstance();
+            conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -52,12 +58,9 @@ public class ClientThread extends Thread {
                 while ((line=in.readLine()) != null) //Read from InputStream (Client OutputStream)
                 {
                     System.out.println(line+ " on socket:"+socket);
-                    Connection conn = null;
+
                     Statement stat = null;
                     ResultSet rs=null;
-                    String driver = "com.mysql.jdbc.Driver";
-                    String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
-                    String dbUSR ="root";
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
                     switch (sig.getCode()) {
@@ -69,8 +72,6 @@ public class ClientThread extends Thread {
 
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
                             try {
-                                Class.forName(driver).newInstance();
-                                conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
                                 stat = conn.createStatement();
                                 rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
                                 while (rs.next()){
@@ -83,6 +84,9 @@ public class ClientThread extends Thread {
                                     String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
                                             "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname() +"')";
                                     stat.executeUpdate(insert);//inserisce il nuovo utente
+                                    stat.executeUpdate("INSERT INTO preferenze(scuola,making,religione,promozione_territorio,donazione_sangue,anziani,tasse)"+
+                                    "VALUES (FALSE ,FALSE ,FALSE ,FALSE ,FALSE ,FALSE,FALSE ,FALSE )");
+                                    System.out.println("utente "+userToCheck.getNickname()+" inserito nel database.");
                                     Signals oknick= new Signals(Code.NICKNAMEFREE, sig.getInfos());
                                     Gson okgson = new Gson();
                                     String json = okgson.toJson(oknick);
@@ -95,7 +99,7 @@ public class ClientThread extends Thread {
                                     output.println(json);//Sendo al Client che il nome è occupato.
                                     checked=null;
                                 }
-                            } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException e){
+                            } catch (SQLException e){
                                 e.printStackTrace();
                             }
                             System.out.println("Era un user! Eccolo: "+ user);
@@ -114,27 +118,37 @@ public class ClientThread extends Thread {
                             System.out.println("ECCO LE PREFERENZE AGGIORNATE di" +prefs.getUser());
                             break;
                         }
+                        /** Ricevo dal client user e password del login.
+                         * se riconosco l'usr nel Database, gli fornisco anche nome e cognome e tutte le preferenze.
+                         * Altrimenti, rejecto la richiesta.*/
                         case (Code.USERTOLOGIN): {
                             Gson glog= new Gson();
                             User usrTologin = glog.fromJson(sig.getInfos(), User.class);
-                            System.out.println("USR TO LOGIN: "+usrTologin);
+                            System.out.println("USR TO LOGIN: "+usrTologin.getNickname());
                             try {
-                                Class.forName(driver).newInstance();
-                                conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
+                                checked="";
+
                                 stat = conn.createStatement();
                                 rs = stat.executeQuery("SELECT nickname FROM utente WHERE nickname='"+usrTologin.getNickname()+"' AND password='"+usrTologin.getPassword()+"'");
                                 while (rs.next()){
                                     checked = rs.getString("nickname");
                                 }
-                                if (checked==usrTologin.getNickname()){
+                                if (checked.equals(usrTologin.getNickname())){
                                     System.out.println("utente"+checked+ "riconosciuto.");
+
+                                    Statement st= conn.createStatement();
+                                    ResultSet results= st.executeQuery("SELECT * FROM utente JOIN preferenze ON utente.nickname = preferenze.nickname ");
+
+
                                     //TODO: RACCOGLI GLI ALTRI DATI UTENTE E LE PREFERENZE E MANDALE AL CLIENT
                                 }
                                 else {
+                                    System.out.println("utente" +checked+" non trovato.");
                                     Signals noUserSig = new Signals(Code.WRONGUSER);
                                     Gson wrongGson = new Gson();
                                     String json= wrongGson.toJson(noUserSig, Signals.class);
                                     output.println(json);
+                                    checked=null;
 
                                 }
                             } catch (SQLException e){e.printStackTrace();}
