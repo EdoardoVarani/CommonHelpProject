@@ -2,6 +2,7 @@ package ClientPack;
 
 import ComunicationPack.Code;
 import ComunicationPack.Signals;
+import UserPack.Preferences;
 import UserPack.User;
 import com.google.gson.Gson;
 
@@ -21,9 +22,9 @@ public class ClientBoss extends Thread {
     private String letto;
     private Gson gson;
     private Signals sig;
-
+    private Preferences prefs;
     boolean airp;
-
+    private boolean running;
     private User user;
 
     public ClientBoss(Socket clientSocket, ClientMain clientMain){
@@ -35,10 +36,12 @@ public class ClientBoss extends Thread {
         try {
             bufReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             buffWriter = new PrintWriter(this.clientSocket.getOutputStream(),true);
+            running=true;
             System.out.println("clientboss running and buffers online.");
+            clientMain.changeUPDOWNStatus(running);
         } catch (Exception e){e.printStackTrace();}
 
-        while (true){ //TODO: usare un flag bool da aggiornare su risposta del server alla query per il nuovo utente
+        while (running){ //TODO: usare un flag bool da aggiornare su risposta del server alla query per il nuovo utente
             try {
                 letto =bufReader.readLine();
                 System.out.println("ricevuto server message: "+letto);
@@ -46,7 +49,7 @@ public class ClientBoss extends Thread {
                 /** Segnale a singolo parametro per le risposte secche: es. userOccupato, a dopio parametro per passaggi di dati.*/
                  sig = gson.fromJson(letto, Signals.class);
                 String code= sig.getCode();
-                System.out.println("IL CODICE: "+code);
+                System.out.println("CODICE MESSAGGIO: "+code);
                 switch (code){
                     case (Code.NICKNAMEFREE): {
                         System.out.println("il nick è libero");
@@ -64,6 +67,12 @@ public class ClientBoss extends Thread {
                         System.out.println("Nessun utente corrispondente.");
                         //clientMain.setClientLogged(false);
                         clientMain.rejectUser();
+                        break;
+                    }
+                    case (Code.SENDALLPREFS): {
+                        clientMain.userLogged(sig.getInfos());
+                        System.out.println("Login andato a buon fine.");
+                        break;
                     }
                 }
             } catch (IOException e) {

@@ -1,16 +1,18 @@
-.tabber .tab{
+
+/* .tabber .tab{
     -fx-background-color: black;
 }
 .messagging{
     -fx-background-color: black;
 }
 
-
+*/
 /*
  * Metro style Push Button
  * Author: Pedro Duque Vieira
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
+/*
 .button {
     -fx-padding: 5 22 5 22;
     -fx-border-color: #e2e2e2;
@@ -49,4 +51,13 @@
 .button:default {
     -fx-background-color: -fx-focus-color;
     -fx-text-fill: #ffffff;
+}
+*/
+.button-raised{
+   /* -fx-padding: 0.7em 0.57em; */
+    -fx-font-size: 14px;
+    -fx-button-type: RAISED;
+    -fx-background-color: rgb(77,102,204);
+    -fx-pref-width: 200;
+    -fx-text-fill: WHITE;
 }

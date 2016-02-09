@@ -48,7 +48,7 @@ public class ClientMain extends Application {
         Parent root = loader.load();
         primaryStage.setTitle("EdoClient");
        // primaryStage.getIcons().add(new Image("/Images/server.png"));
-        primaryStage.setScene(new Scene(root, 500, 500));
+        primaryStage.setScene(new Scene(root, 496, 672));
         clientController = loader.getController();
         clientController.setMain(this);
         primaryStage.show();
@@ -63,6 +63,15 @@ public class ClientMain extends Application {
         clientBoss = new ClientBoss(clientSocket,this); //nuovo clientBoss, gli passo il client socket e il client main
         clientBoss.start();
     }
+    public void changeUPDOWNStatus(boolean state){
+        if (state){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+            clientController.connectionDOWN.setVisible(false);
+            clientController.connectionUP.setVisible(true);
+        }});
+    }}
 
     public void sendMessageToServer(String msg){
         try {
@@ -160,17 +169,23 @@ public class ClientMain extends Application {
                     registerController.setNickFree(true);
                     registerStage.hide();
                     registerStage.close();
-                    clientController.welcomeLabel.setText("Ciao,"+clientBoss.getUser().getNickname());
+                    clientController.launchToMessagging();
+                    System.out.println("STO PER SETTARE I BOTTONI");
+                   /* clientController.welcomeLabel.setText("Ciao,"+clientBoss.getUser().getNickname());
+                    clientController.regLabel.setVisible(false);
+                    clientController.loginButton.setText("LOGOUT");
+                    clientController.registerButton.setVisible(false);
+                    clientController.registerButton.setDisable(true); */
                 }
             }); //primarystage.close (in runlater)
 
-            //BARACCA DEL TOGLI-TOGLI
         } else {
           Platform.runLater(new Runnable() {
               @Override
               public void run() {
                   registerController.setNickFree(false);
                   registerController.nicknameField.clear();
+                  clientController.launchToMessagging();
               }
           });
         }
@@ -197,5 +212,32 @@ public class ClientMain extends Application {
     }
 
 
+    public void userLogged(String serPrefs){
+
+        Gson gs= new Gson();
+        prefs =gs.fromJson(serPrefs, Preferences.class);
+        clientBoss.setUser(prefs.getUser());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                loginStage.hide();
+                loginStage.close();
+                clientController.welcomeLabel.setText("Bentornato, "+prefs.getUser().getNickname());
+                clientController.launchToMessagging();
+                clientController.regLabel.setVisible(false);
+                clientController.loginButton.setText("LOGOUT");
+                clientController.registerButton.setVisible(false);
+                clientController.registerButton.setDisable(true);
+                isClientLogged=true;
+                clientController.scuolaBox.setSelected(prefs.isScuola());
+                clientController.makingBox.setSelected(prefs.isMaking());
+                clientController.religioneBox.setSelected(prefs.isReligione());
+                clientController.promozione_territorioBox.setSelected(prefs.isPromozione_territorio());
+                clientController.donazione_sangueBox.setSelected(prefs.isDonazione_sangue());
+                clientController.anzianiBox.setSelected(prefs.isAnziani());
+                clientController.tasseBox.setSelected(prefs.isTasse());
+            }
+        });
+    }
 
 }

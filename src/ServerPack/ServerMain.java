@@ -34,6 +34,14 @@ public class ServerMain extends Application {
         serverController = loader.getController();
         serverController.setMain(this);
         primaryStage.show();
+      //  serverController.setData();
+       /* final ComboBox<String> comboSelect = new ComboBox<ObservableArray>();
+        comboSelect.getItems().addAll("PRIMO", "SECONDO", "TERZO");
+        comboSelect.setValue("PRIMO");
+        System.out.println(comboSelect.getValue());
+
+*/
+
     }
 
     public static void main(String[] args) {

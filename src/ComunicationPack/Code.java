@@ -10,8 +10,10 @@ package ComunicationPack;
     public static final String NICKNAMEFREE = "nicknamefree";
     public static final String NICKNAMEBUSY ="nicknamebusy";
     public static final String UPDATEPREFS ="updateprefs";
+    //LOGIN
     public static final String USERTOLOGIN= "usertologin";
     public static final String WRONGUSER = "wronguser";
+    public static final String SENDALLPREFS ="sendallprefs";
 
     private Code(){
         throw new AssertionError();

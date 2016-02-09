@@ -28,17 +28,20 @@ public class ClientThread extends Thread {
     private  String checked;
     private ConnectedClient connectedClient;
 
-    private Connection conn = null;
+    private Connection conn= null;
+    private Statement stat;
     private User user;
     private Preferences prefs;
     private boolean airplane;
+    private AcceptorThread acceptorThread;
 
     //CONSTRUCTOR
-    public ClientThread(Socket clientSocket, ConnectedClient connectedClient) {
+    public ClientThread(Socket clientSocket, ConnectedClient connectedClient, AcceptorThread acceptorThread) {
         this.socket = clientSocket;
         this.connectedClient=connectedClient;
+        this.acceptorThread=acceptorThread;
     }
-    public ClientThread(Socket clientsocket){
+    public ClientThread(Socket clientsocket, AcceptorThread acceptorThread){
         this.socket=clientsocket;
     }
     public void run() {
@@ -50,6 +53,7 @@ public class ClientThread extends Thread {
             String dbUSR ="root";
             Class.forName(driver).newInstance();
             conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
+            stat = conn.createStatement();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -59,8 +63,8 @@ public class ClientThread extends Thread {
                 {
                     System.out.println(line+ " on socket:"+socket);
 
-                    Statement stat = null;
                     ResultSet rs=null;
+                    stat = conn.createStatement();
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
                     switch (sig.getCode()) {
@@ -72,7 +76,7 @@ public class ClientThread extends Thread {
 
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
                             try {
-                                stat = conn.createStatement();
+
                                 rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
                                 while (rs.next()){
                                    checked = rs.getString("nickname");
@@ -82,15 +86,16 @@ public class ClientThread extends Thread {
                                     this.user=userToCheck; //SE Valido, inizializzo il mio user
                                    // connectedClient.setUser(user);
                                     String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
-                                            "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname() +"')";
+                                            "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname()+"')";
                                     stat.executeUpdate(insert);//inserisce il nuovo utente
-                                    stat.executeUpdate("INSERT INTO preferenze(scuola,making,religione,promozione_territorio,donazione_sangue,anziani,tasse)"+
-                                    "VALUES (FALSE ,FALSE ,FALSE ,FALSE ,FALSE ,FALSE,FALSE ,FALSE )");
+                                    stat.executeUpdate("INSERT INTO preferenze(nickname,scuola,making,religione,promozione_territorio,donazione_sangue,anziani,tasse)"+
+                                    "VALUES ('"+user.getNickname()+"',FALSE ,FALSE ,FALSE ,FALSE ,FALSE,FALSE ,FALSE )");
                                     System.out.println("utente "+userToCheck.getNickname()+" inserito nel database.");
                                     Signals oknick= new Signals(Code.NICKNAMEFREE, sig.getInfos());
                                     Gson okgson = new Gson();
                                     String json = okgson.toJson(oknick);
                                     output.println(json); //Sendo al client che il nick è libero
+                                    checked=null;
                                 } else {
                                     System.out.println("Utente "+nameToCheck +"già in uso");
                                     Signals nickBusy = new Signals(Code.NICKNAMEBUSY);
@@ -109,18 +114,19 @@ public class ClientThread extends Thread {
                             Gson gAirp = new Gson();
                             airplane=gAirp.fromJson(sig.getInfos(),boolean.class);
                             System.out.println("Airplane: " +airplane);
-                            //TODO: update aereo in database
                             break;
                         }
                         case (Code.UPDATEPREFS): {
                             Gson gPrefs = new Gson();
                             prefs = gPrefs.fromJson(sig.getInfos(),Preferences.class);
-                            System.out.println("ECCO LE PREFERENZE AGGIORNATE di" +prefs.getUser());
+                            System.out.println("ECCO LE PREFERENZE AGGIORNATE di" +prefs.getUser().getNickname());
+                            stat.execute("UPDATE preferenze SET scuola ="+prefs.isScuola()+",making="+prefs.isMaking()+",religione="+prefs.isReligione()+",promozione_territorio="+prefs.isPromozione_territorio()+",donazione_sangue="+prefs.isDonazione_sangue()+",anziani="+prefs.isAnziani()+",tasse="+prefs.isTasse()+" WHERE nickname='"+prefs.getUser().getNickname()+"' ");
                             break;
                         }
                         /** Ricevo dal client user e password del login.
                          * se riconosco l'usr nel Database, gli fornisco anche nome e cognome e tutte le preferenze.
                          * Altrimenti, rejecto la richiesta.*/
+
                         case (Code.USERTOLOGIN): {
                             Gson glog= new Gson();
                             User usrTologin = glog.fromJson(sig.getInfos(), User.class);
@@ -128,19 +134,44 @@ public class ClientThread extends Thread {
                             try {
                                 checked="";
 
-                                stat = conn.createStatement();
+
                                 rs = stat.executeQuery("SELECT nickname FROM utente WHERE nickname='"+usrTologin.getNickname()+"' AND password='"+usrTologin.getPassword()+"'");
                                 while (rs.next()){
                                     checked = rs.getString("nickname");
                                 }
                                 if (checked.equals(usrTologin.getNickname())){
-                                    System.out.println("utente"+checked+ "riconosciuto.");
+                                    System.out.println("utente "+checked+ " riconosciuto.");
+                                    this.user=usrTologin;
 
-                                    Statement st= conn.createStatement();
-                                    ResultSet results= st.executeQuery("SELECT * FROM utente JOIN preferenze ON utente.nickname = preferenze.nickname ");
+                                    System.out.println("Sto per eseguire la query. user= "+user.getNickname());
+                                    ResultSet resultSet= stat.executeQuery("SELECT * FROM utente JOIN preferenze ON utente.nickname = preferenze.nickname WHERE preferenze.nickname='"+user.getNickname()+"'");
 
+                                    prefs = new Preferences();
+                                    prefs.setUser(user);
+                                    while (resultSet.next()){
+                                        prefs.setScuola(resultSet.getBoolean("scuola"));
+                                        prefs.setMaking(resultSet.getBoolean("making"));
+                                        prefs.setReligione(resultSet.getBoolean("religione"));
+                                        prefs.setPromozione_territorio(resultSet.getBoolean("promozione_territorio"));
+                                        prefs.setDonazione_sangue(resultSet.getBoolean("donazione_sangue"));
+                                        prefs.setAnziani(resultSet.getBoolean("anziani"));
+                                        prefs.setTasse(resultSet.getBoolean("tasse"));
+                                    }
 
-                                    //TODO: RACCOGLI GLI ALTRI DATI UTENTE E LE PREFERENZE E MANDALE AL CLIENT
+                                    System.out.println("USR:"+prefs.getUser().getNickname());
+                                    System.out.println("anziani: "+prefs.isAnziani());
+                                    System.out.println(prefs.toString());
+                                    Gson gprefs= new Gson();
+                                    String SerPrefs= gprefs.toJson(prefs);
+                                    Signals allprefsSig = new Signals(Code.SENDALLPREFS,SerPrefs);
+                                    Gson gsig= new Gson();
+                                    String json = gsig.toJson(allprefsSig);
+                                    output.println(json); //sendo al client tutte le prefs
+                                    /*System.out.println("USER: "+user);
+                                    System.out.println("Connclient: "+connectedClient);
+                                    connectedClient.setUser(this.user);
+*/
+
                                 }
                                 else {
                                     System.out.println("utente" +checked+" non trovato.");
