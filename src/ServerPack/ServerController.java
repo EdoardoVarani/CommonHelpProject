@@ -1,13 +1,14 @@
 package ServerPack;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,26 +25,37 @@ public class ServerController implements Initializable{
     @FXML
     ListView listView;
     @FXML
-    TextField textAll;
+    JFXTextArea textAll;
     @FXML
-    JFXButton sendAllButton, connectButton;
+    JFXButton sendButton, connectButton;
 
     @FXML
-    JFXComboBox<String> comboSelect;
+    JFXTextField titleText;
+   @FXML
+    ChoiceBox<String> choiceSelect;
 
-ObservableList<String> list= FXCollections.observableArrayList();
+    public static final ObservableList<String> list= FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        list.addAll("uno","due","tre");
-        comboSelect.setItems(list);
+
+        list.addAll("Scuola","Making","Religione","Attività locali", "Donazioni sangue", "Anziani", "Tasse");
+        System.out.println(list);
+       choiceSelect.setItems(list);
+
         // comboSelect.getItems().clear();
     }
 
     @FXML private void sendToAll(){ // invia messaggio a tutti quelli non in modalità aereo
-        String textall= textAll.getText();
-        serverMain.sendToClients(textall); //main method, chiamerà la relativa send nell'acceptor
+       // String textall= textAll.getText();
+       // serverMain.sendToClients(textall); //main method, chiamerà la relativa send nell'acceptor
         System.out.println("shouted to all in controller");
+    }
+
+    @FXML private void sendToClients(){
+        System.out.println("SENDTOCLIENTS PRESSED");
+        serverMain.sendToClients(textAll.getText(), choiceSelect.getValue(), titleText.getText());
+
     }
     @FXML public void connectNow(){ //Start the Server.
         serverMain.creaServer();

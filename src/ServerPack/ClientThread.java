@@ -1,6 +1,7 @@
 package ServerPack;
 
 import ComunicationPack.Code;
+import ComunicationPack.Post;
 import ComunicationPack.Signals;
 import UserPack.Preferences;
 import UserPack.SecurityClass;
@@ -30,7 +31,11 @@ public class ClientThread extends Thread {
 
     private Connection conn= null;
     private Statement stat;
+
+
     private User user;
+
+
     private Preferences prefs;
     private boolean airplane;
     private AcceptorThread acceptorThread;
@@ -194,10 +199,16 @@ public class ClientThread extends Thread {
         }
     }
 
-    public void send(String msg){
+    public void send(Post post){
+
+       Gson gpost= new Gson();
+        String serpost= gpost.toJson(post);
+        Signals sigPost= new Signals(Code.SENDMESSAGE, serpost);
+        Gson gson= new Gson();
+        String json= gson.toJson(sigPost);
         try {
-            output.println(msg);
-            System.out.println("message "+msg +"sent to client on socket: "+socket);
+            output.println(json);
+            System.out.println("Message sent.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,4 +219,20 @@ public class ClientThread extends Thread {
         return airplane;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    public Preferences getPrefs() {
+        return prefs;
+    }
+
+    public void setPrefs(Preferences prefs) {
+        this.prefs = prefs;
+    }
 }

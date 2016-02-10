@@ -1,14 +1,20 @@
 package ClientPack;
 
+import ComunicationPack.Post;
 import UserPack.Preferences;
 import UserPack.User;
 import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import tray.notification.NotificationType;
+import tray.notification.TrayNotification;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -33,10 +39,14 @@ public class ClientMain extends Application {
     private boolean isNicknameFree=false;
 
     private boolean isClientLogged=false;
+
+    private ObservableList<String> obsMsg= FXCollections.observableArrayList();;
     /** STAGES */
     public Stage registerStage;
     public Stage loginStage;
+    String path= "/GraphicPack/Images/teacher44.png";
 
+    private  final Image IMG_SCUOLA= new Image(path);
 
     public static void main(String[] args) {
         launch(args);
@@ -49,9 +59,13 @@ public class ClientMain extends Application {
         primaryStage.setTitle("EdoClient");
        // primaryStage.getIcons().add(new Image("/Images/server.png"));
         primaryStage.setScene(new Scene(root, 496, 672));
+        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(400);
         clientController = loader.getController();
         clientController.setMain(this);
         primaryStage.show();
+       /* clientController.clientTab.setMinHeight(400);
+        clientController.clientTab.setMinWidth(400); */ //TODO: NON VA
     }
 
     public void creaClient(){ //
@@ -223,7 +237,7 @@ public class ClientMain extends Application {
                 loginStage.hide();
                 loginStage.close();
                 clientController.welcomeLabel.setText("Bentornato, "+prefs.getUser().getNickname());
-                clientController.launchToMessagging();
+//                clientController.launchToMessagging();
                 clientController.regLabel.setVisible(false);
                 clientController.loginButton.setText("LOGOUT");
                 clientController.registerButton.setVisible(false);
@@ -240,4 +254,38 @@ public class ClientMain extends Application {
         });
     }
 
+    public void addInListView(Post post){
+      // Image img= new Image(getClass().getClassLoader().getResource("CommonHelp/GrapghicPack/Images/teacher44.png").toString());
+//TODO: IMMAGINI CATEGORIA NELLA NOTIFICA
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                NotificationType type = NotificationType.NOTICE;
+                TrayNotification trayNotification = new TrayNotification();
+                trayNotification.setTitle("NEW! "+post.getTitle()+"canale: "+post.getToWho());
+                String cutted= post.getMessage().substring(0,35)+"...";
+                trayNotification.setMessage(cutted);
+                trayNotification.showAndWait();
+                obsMsg = FXCollections.observableArrayList();
+                obsMsg.add(post.getMessage());
+                clientController.listView.setItems(obsMsg);
+                clientController.listView.scrollTo(obsMsg);
+                System.out.println(obsMsg);
+            /*    if (post.getToWho().equals( Code.SCUOLA)){
+                    clientController.listView.setCellFactory(param -> new ListCell<String>(){
+                        private ImageView imgView= new ImageView();
+
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (!empty){
+                                imgView.setImage(IMG_SCUOLA);
+                            }
+                        }
+                    });} */
+
+            }
+        });
+    }
 }

@@ -1,5 +1,6 @@
 package ServerPack;
 
+import ComunicationPack.Post;
 import UserPack.User;
 
 import java.net.Socket;
@@ -22,8 +23,8 @@ public class ConnectedClient {
     }
 
 
-    public void sendmsg(String msg){
-        clientThread.send(msg);
+    public void sendmsg(Post post){
+        clientThread.send(post);
     }
     public  boolean getAirplane(){
        return clientThread.getAirplane();

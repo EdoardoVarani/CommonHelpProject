@@ -30,10 +30,13 @@ public class ServerMain extends Application {
         Parent root=loader.load();
 
         primaryStage.setTitle("EdoServer v.0.1");
-        primaryStage.setScene(new Scene(root, 300, 400));
+        primaryStage.setScene(new Scene(root, 400, 400));
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(400);
         serverController = loader.getController();
         serverController.setMain(this);
         primaryStage.show();
+       // serverController.comboSelect.requestFocus();
       //  serverController.setData();
        /* final ComboBox<String> comboSelect = new ComboBox<ObservableArray>();
         comboSelect.getItems().addAll("PRIMO", "SECONDO", "TERZO");
@@ -57,9 +60,11 @@ public class ServerMain extends Application {
         acceptorThread = new AcceptorThread(serverSocket);
         acceptorThread.start();
     }
-    public void sendToClients(String msg){
-        acceptorThread.sendToClients(msg);
+    public void sendToClients(String msg, String toWho, String title){
+        acceptorThread.sendToClients(msg, toWho, title);
     }
+
+
 
 }
 

@@ -1,6 +1,7 @@
 package ClientPack;
 
 import ComunicationPack.Code;
+import ComunicationPack.Post;
 import ComunicationPack.Signals;
 import UserPack.Preferences;
 import UserPack.User;
@@ -72,6 +73,15 @@ public class ClientBoss extends Thread {
                     case (Code.SENDALLPREFS): {
                         clientMain.userLogged(sig.getInfos());
                         System.out.println("Login andato a buon fine.");
+                        break;
+                    }
+                    case (Code.SENDMESSAGE):{//il sig info è un json con dentro un Post
+                        Gson gPost= new Gson();
+                        Post post = gPost.fromJson(sig.getInfos(),Post.class);
+                        System.out.println("MESSAGGIO DI TIPO:" +post.getToWho());
+                        System.out.println("BODY: "+post.getMessage());
+                        System.out.println("TITOLO:"+post.getTitle());
+                        clientMain.addInListView(post);
                         break;
                     }
                 }

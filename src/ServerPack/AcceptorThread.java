@@ -1,5 +1,8 @@
 package ServerPack;
 
+import ComunicationPack.Code;
+import ComunicationPack.Post;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +15,7 @@ public class AcceptorThread extends Thread {
 
     public ArrayList<ConnectedClient> connectedClients = new ArrayList<ConnectedClient>();
     public ServerSocket serverSocket;
+
 
     //CONSTRUCTOR
     public AcceptorThread( ServerSocket serverSocket) {
@@ -33,15 +37,83 @@ public class AcceptorThread extends Thread {
             }
         }
     }
-    public void sendToClients(String msg){
+    public void sendToClients(String msg, String toWho, String title){
+
+        System.out.println("SONO IN ACCEPTORTHREAD, MSG: "+msg +"ACHI:"+toWho);
+        switch (toWho){
+            case ("Scuola"):{
+                System.out.println("messaggio scolastico");
+                Post post= new Post(Code.SCUOLA,title,msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isScuola()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+           break; }
+            case ("Making"):{
+                System.out.println("Messaggio per i makers");
+                Post post= new Post(Code.MAKING,title, msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isMaking()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+                break;
+            }
+            case ("Religione"):{
+                System.out.println("Messaggio per i religiosi");
+                Post post= new Post(Code.RELIGIONE,title, msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isReligione()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+                break;
+            }
+            case ("Attività locali"):{
+                Post post= new Post(Code.PROMOZIONE_TERRITORIO,title, msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isPromozione_territorio()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+            break;}
+            case ("Donazioni sangue"):{
+                Post post= new Post(Code.DONAZIONE_SANGUE,title, msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isDonazione_sangue()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+           break; }
+            case ("Anziani"):{
+                Post post= new Post(Code.ANZIANI,title, msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isAnziani()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+                break;}
+            case ("Tasse"):{
+                Post post= new Post(Code.TASSE,title, msg);
+                for (int i=0; i<connectedClients.size(); i++) {
+                    if (connectedClients.get(i).getClientThread().getPrefs().isTasse()){
+                        connectedClients.get(i).sendmsg(post);
+                    }
+                }
+            }
+        }
+        System.out.println(toWho);
+/*
         for (int i=0; i<connectedClients.size(); i++) {
+            System.out.println(connectedClients.get(i).getClientThread().getUser().getNickname()); //TODO: ;)
+            System.out.println(connectedClients.get(i).getClientThread().getPrefs().);
             if (!connectedClients.get(i).getAirplane()) { //
                 connectedClients.get(i).sendmsg(msg);
             }
-        }
+        } */
     }
 
-    //todo: ADESSO ho connectedclient.getuser! Posso scrivere ai client che voglio
    /* public void sendToNotAirplane(String msg){
         for (int i=0;i<connectedClients.size()-1;i++){
           if (connectedClients.get(i).getClientThread().getAirplane()==false){

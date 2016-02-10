@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JTelegraph-1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../libs/TrayNotification.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
