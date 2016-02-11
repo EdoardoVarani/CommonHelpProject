@@ -2,6 +2,7 @@ package ServerPack;
 
 import ComunicationPack.Code;
 import ComunicationPack.Post;
+import ComunicationPack.Reporting;
 import ComunicationPack.Signals;
 import UserPack.Preferences;
 import UserPack.SecurityClass;
@@ -27,11 +28,9 @@ public class ClientThread extends Thread {
     private PrintWriter output;
     private Signals sig;
     private  String checked;
-    private ConnectedClient connectedClient;
-
     private Connection conn= null;
     private Statement stat;
-
+    private ServerMain serverMain;
 
     private User user;
 
@@ -41,13 +40,11 @@ public class ClientThread extends Thread {
     private AcceptorThread acceptorThread;
 
     //CONSTRUCTOR
-    public ClientThread(Socket clientSocket, ConnectedClient connectedClient, AcceptorThread acceptorThread) {
+    public ClientThread(Socket clientSocket, AcceptorThread acceptorThread, ServerMain serverMain) {
         this.socket = clientSocket;
-        this.connectedClient=connectedClient;
+
         this.acceptorThread=acceptorThread;
-    }
-    public ClientThread(Socket clientsocket, AcceptorThread acceptorThread){
-        this.socket=clientsocket;
+        this.serverMain=serverMain;
     }
     public void run() {
         try { //APRO I BUFFERS PER OGNI NUOVO CLIENT
@@ -72,6 +69,7 @@ public class ClientThread extends Thread {
                     stat = conn.createStatement();
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
+                    System.out.println("CODICE: "+sig.getCode());
                     switch (sig.getCode()) {
 
                         case (Code.USERTOREGISTRATE): {
@@ -84,17 +82,17 @@ public class ClientThread extends Thread {
 
                                 rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
                                 while (rs.next()){
-                                   checked = rs.getString("nickname");
+                                    checked = rs.getString("nickname");
                                 }
                                 if (checked==null){
                                     System.out.println("Utente valido!");
                                     this.user=userToCheck; //SE Valido, inizializzo il mio user
-                                   // connectedClient.setUser(user);
+                                    // connectedClient.setUser(user);
                                     String insert="INSERT INTO utente(nickname, password, nome, cognome) " +
                                             "VALUES ('"+user.getNickname() + "','" +user.getPassword() + "','" + user.getUsername() + "','" + user.getSurname()+"')";
                                     stat.executeUpdate(insert);//inserisce il nuovo utente
                                     stat.executeUpdate("INSERT INTO preferenze(nickname,scuola,making,religione,promozione_territorio,donazione_sangue,anziani,tasse)"+
-                                    "VALUES ('"+user.getNickname()+"',FALSE ,FALSE ,FALSE ,FALSE ,FALSE,FALSE ,FALSE )");
+                                            "VALUES ('"+user.getNickname()+"',FALSE ,FALSE ,FALSE ,FALSE ,FALSE,FALSE ,FALSE )");
                                     System.out.println("utente "+userToCheck.getNickname()+" inserito nel database.");
                                     Signals oknick= new Signals(Code.NICKNAMEFREE, sig.getInfos());
                                     Gson okgson = new Gson();
@@ -190,6 +188,12 @@ public class ClientThread extends Thread {
                             } catch (SQLException e){e.printStackTrace();}
                             break;
                         }
+                        case (Code.SENDREPOTOSERVER):{
+                            Gson grep= new Gson();
+                            Reporting report=gson.fromJson(sig.getInfos(), Reporting.class);
+                            serverMain.updateListView(report);
+
+                        }
                     }//switch END
                 }
             }
@@ -201,7 +205,7 @@ public class ClientThread extends Thread {
 
     public void send(Post post){
 
-       Gson gpost= new Gson();
+        Gson gpost= new Gson();
         String serpost= gpost.toJson(post);
         Signals sigPost= new Signals(Code.SENDMESSAGE, serpost);
         Gson gson= new Gson();
@@ -235,4 +239,5 @@ public class ClientThread extends Thread {
     public void setPrefs(Preferences prefs) {
         this.prefs = prefs;
     }
+
 }

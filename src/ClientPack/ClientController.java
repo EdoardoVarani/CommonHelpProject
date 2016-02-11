@@ -1,8 +1,6 @@
 package ClientPack;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -21,17 +19,18 @@ public class ClientController {
 
 
     private boolean NickFree=false;
-    @FXML
-    Button clientConnectButton;
+
     @FXML
     TextField textToSend;
-    @FXML Button sendButton;
     @FXML Button loginButton;
     @FXML Button registerButton;
     @FXML
     Label welcomeLabel, regLabel;
     @FXML
-    JFXButton prefSendButton;
+    JFXButton prefSendButton, segnalazioneBtn;
+    @FXML
+    JFXTextArea segnalazioneText;
+
 
     @FXML
     JFXTabPane clientTab;
@@ -47,9 +46,9 @@ public class ClientController {
 
 
     @FXML CheckBox airplane;
-    @FXML private void Aireplaine(){
+    @FXML private void airplaneNow(){
        airplane.isSelected();
-        clientMain.airplaineChanged(airplane.isSelected());
+        clientMain.airplaneChanged(airplane.isSelected());
     }
 
     //EVENT LISTENERS
@@ -95,4 +94,7 @@ if (!textToSend.getText().equalsIgnoreCase("")){
         selectionModel.select(1); // select by index starting with 0
     }
 
+    @FXML private void segnalazioneNow(){
+        clientMain.sendReport(segnalazioneText.getText());
+    }
 }

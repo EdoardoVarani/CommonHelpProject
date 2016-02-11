@@ -15,11 +15,12 @@ public class AcceptorThread extends Thread {
 
     public ArrayList<ConnectedClient> connectedClients = new ArrayList<ConnectedClient>();
     public ServerSocket serverSocket;
-
+    private ServerMain serverMain;
 
     //CONSTRUCTOR
-    public AcceptorThread( ServerSocket serverSocket) {
+    public AcceptorThread(ServerSocket serverSocket, ServerMain serverMain) {
         this.serverSocket=serverSocket;
+        this.serverMain=serverMain;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class AcceptorThread extends Thread {
                 Socket socket = serverSocket.accept();//Establish a Socket conection with client;
                 System.out.println("connection accepted from :" + socket);
                // connectedClients.add(new ConnectedClient(new ClientThread(socket,this.connectedClients.get(connectedClients.size()-1)),socket)); //add to my mapped connected clients;
-                  connectedClients.add(new ConnectedClient(new ClientThread(socket,this),socket));
+                  connectedClients.add(new ConnectedClient(new ClientThread(socket,this, serverMain),socket));
                    connectedClients.get(connectedClients.size()-1).getClientThread().start(); //start single ClientThread
             } catch (IOException e) {
                 e.printStackTrace();
@@ -38,14 +39,13 @@ public class AcceptorThread extends Thread {
         }
     }
     public void sendToClients(String msg, String toWho, String title){
-
-        System.out.println("SONO IN ACCEPTORTHREAD, MSG: "+msg +"ACHI:"+toWho);
+/** Confeziono il post e lo invio ai client che hanno le preferenza attiva e la modalità aereo spenta.*/
         switch (toWho){
             case ("Scuola"):{
                 System.out.println("messaggio scolastico");
                 Post post= new Post(Code.SCUOLA,title,msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isScuola()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isScuola() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -54,7 +54,7 @@ public class AcceptorThread extends Thread {
                 System.out.println("Messaggio per i makers");
                 Post post= new Post(Code.MAKING,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isMaking()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isMaking() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -64,7 +64,7 @@ public class AcceptorThread extends Thread {
                 System.out.println("Messaggio per i religiosi");
                 Post post= new Post(Code.RELIGIONE,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isReligione()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isReligione() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -73,7 +73,7 @@ public class AcceptorThread extends Thread {
             case ("Attività locali"):{
                 Post post= new Post(Code.PROMOZIONE_TERRITORIO,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isPromozione_territorio()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isPromozione_territorio() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -81,7 +81,7 @@ public class AcceptorThread extends Thread {
             case ("Donazioni sangue"):{
                 Post post= new Post(Code.DONAZIONE_SANGUE,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isDonazione_sangue()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isDonazione_sangue() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -89,7 +89,7 @@ public class AcceptorThread extends Thread {
             case ("Anziani"):{
                 Post post= new Post(Code.ANZIANI,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isAnziani()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isAnziani() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -97,7 +97,7 @@ public class AcceptorThread extends Thread {
             case ("Tasse"):{
                 Post post= new Post(Code.TASSE,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isTasse()){
+                    if (connectedClients.get(i).getClientThread().getPrefs().isTasse() && !connectedClients.get(i).getClientThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }

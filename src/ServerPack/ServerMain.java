@@ -1,9 +1,14 @@
 package ServerPack;
 
+import ComunicationPack.Reporting;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Separator;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +23,7 @@ public class ServerMain extends Application {
     private int port=4321;
     private ServerSocket serverSocket;
     private AcceptorThread acceptorThread;
+    private ObservableList<String> obsMsg= FXCollections.observableArrayList();;
 
 
 
@@ -57,13 +63,27 @@ public class ServerMain extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        acceptorThread = new AcceptorThread(serverSocket);
+        acceptorThread = new AcceptorThread(serverSocket, this);
         acceptorThread.start();
     }
     public void sendToClients(String msg, String toWho, String title){
         acceptorThread.sendToClients(msg, toWho, title);
     }
 
+    public void updateListView(Reporting repo){
+       /* obsMsg.add("Segnalazione da: "+repo.getUser().getUsername()+" "+repo.getUser().getSurname()+"("
+        +repo.getUser().getNickname()+") : "+repo.getMsg()); */ //TODO: VORREI USERNAME
+        obsMsg.add("Segnalazione da:"+repo.getUser().getNickname()+") : "+repo.getMsg());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                serverController.listView.setItems(obsMsg);
+                serverController.listView.scrollTo(obsMsg);
+                serverController.listView.setItems((ObservableList) new Separator());
+            }
+        });
+
+    }
 
 
 }

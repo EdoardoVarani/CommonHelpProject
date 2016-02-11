@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CommonHelp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CommonHelp_jar</output-path>
+    <root id="archive" name="CommonHelp.jar">
+      <element id="module-output" name="CommonHelp" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../libs/TrayNotification.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.5/gson-2.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/jfoenix.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

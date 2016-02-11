@@ -1,6 +1,7 @@
 package ServerPack;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -8,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,7 +23,7 @@ public class ServerController implements Initializable{
     private  ServerMain serverMain;
 
     @FXML
-    ListView listView;
+    JFXListView listView;
     @FXML
     JFXTextArea textAll;
     @FXML

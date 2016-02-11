@@ -11,6 +11,7 @@ package ComunicationPack;
     public static final String NICKNAMEBUSY ="nicknamebusy";
     public static final String UPDATEPREFS ="updateprefs";
     public static final String SENDMESSAGE= "sendmessage";
+    public static final String SENDREPOTOSERVER="sendrepotoserver";
     //LOGIN
     public static final String USERTOLOGIN= "usertologin";
     public static final String WRONGUSER = "wronguser";

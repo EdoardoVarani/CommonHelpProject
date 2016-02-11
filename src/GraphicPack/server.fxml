@@ -112,5 +112,24 @@
                </bottom></BorderPane>
          </content>
       </Tab>
+      <Tab text="Segnalazioni">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <GridPane BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="278.0" minHeight="10.0" prefHeight="278.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="176.0" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <JFXListView fx:id="listView" />
+                     </children>
+                  </GridPane>
+               </center></BorderPane>
+         </content>
+      </Tab>
    </tabs>
 </JFXTabPane>

@@ -7,7 +7,10 @@ import UserPack.Preferences;
 import UserPack.User;
 import com.google.gson.Gson;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -134,6 +137,12 @@ public class ClientBoss extends Thread {
         Signals sig = new Signals(Code.CHECKIFNICKAMETAKED, nickname);
         return false; //TODO: SISTEMARE
 
+    }
+    public void sendReport(String jRepo){
+        Signals sig= new Signals(Code.SENDREPOTOSERVER,jRepo);
+        Gson gson = new Gson();
+        String json = gson.toJson(sig);
+        buffWriter.println(json);
     }
     public User getUser() {
         return user;

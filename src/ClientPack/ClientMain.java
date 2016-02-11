@@ -1,6 +1,7 @@
 package ClientPack;
 
 import ComunicationPack.Post;
+import ComunicationPack.Reporting;
 import UserPack.Preferences;
 import UserPack.User;
 import com.google.gson.Gson;
@@ -11,8 +12,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
 
@@ -56,11 +59,10 @@ public class ClientMain extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/GraphicPack/client.fxml"));
         Parent root = loader.load();
-        primaryStage.setTitle("EdoClient");
+        primaryStage.setTitle("PubblicaComunicazione");
        // primaryStage.getIcons().add(new Image("/Images/server.png"));
         primaryStage.setScene(new Scene(root, 496, 672));
-        primaryStage.setMinWidth(400);
-        primaryStage.setMinHeight(400);
+        primaryStage.setMinHeight(329);
         clientController = loader.getController();
         clientController.setMain(this);
         primaryStage.show();
@@ -97,9 +99,9 @@ public class ClientMain extends Application {
         this.outClient=outClient;
     }
 
-    public void airplaineChanged(boolean airplaine){
+    public void airplaneChanged(boolean airplane){
         Gson gson = new Gson();
-        String json = gson.toJson(airplaine);
+        String json = gson.toJson(airplane);
         clientBoss.airplaneChanged(json);
     }
     public void registerUser(String nickname, String password, String name, String surname){
@@ -162,6 +164,7 @@ public class ClientMain extends Application {
         prefs= new Preferences(scuola,making,religione,promozione_territorio,donazione_sangue,
                 anziani,tasse);
         prefs.setUser(clientBoss.getUser());
+       // System.err.println("UTENTE: "+prefs.getUser().getUsername()+prefs.getUser().getSurname());//TODO: non ho username etc
         Gson gson= new Gson();
         String json= gson.toJson(prefs);
         clientBoss.updatePrefs(json);
@@ -236,12 +239,12 @@ public class ClientMain extends Application {
             public void run() {
                 loginStage.hide();
                 loginStage.close();
-                clientController.welcomeLabel.setText("Bentornato, "+prefs.getUser().getNickname());
-//                clientController.launchToMessagging();
+             /*   clientController.welcomeLabel.setText("Bentornato, "+prefs.getUser().getNickname());
+                clientController.launchToMessagging();
                 clientController.regLabel.setVisible(false);
                 clientController.loginButton.setText("LOGOUT");
                 clientController.registerButton.setVisible(false);
-                clientController.registerButton.setDisable(true);
+                clientController.registerButton.setDisable(true); */
                 isClientLogged=true;
                 clientController.scuolaBox.setSelected(prefs.isScuola());
                 clientController.makingBox.setSelected(prefs.isMaking());
@@ -263,14 +266,17 @@ public class ClientMain extends Application {
             public void run() {
                 NotificationType type = NotificationType.NOTICE;
                 TrayNotification trayNotification = new TrayNotification();
-                trayNotification.setTitle("NEW! "+post.getTitle()+"canale: "+post.getToWho());
-                String cutted= post.getMessage().substring(0,35)+"...";
-                trayNotification.setMessage(cutted);
-                trayNotification.showAndWait();
-                obsMsg = FXCollections.observableArrayList();
-                obsMsg.add(post.getMessage());
+                trayNotification.setTitle("NEW! "+post.getTitle()+" canale: "+post.getToWho());
+                if (post.getMessage().length()>35){
+                    String cutted= post.getMessage().substring(0,35)+"...";
+                    trayNotification.setMessage(cutted);
+                } else trayNotification.setMessage(post.getMessage());
+                trayNotification.showAndDismiss(Duration.seconds(5));
+
+                obsMsg.add("Titolo: "+post.getTitle()+System.lineSeparator()+"Post: "+post.getMessage());
                 clientController.listView.setItems(obsMsg);
                 clientController.listView.scrollTo(obsMsg);
+                clientController.listView.setItems((ObservableList) new Separator());
                 System.out.println(obsMsg);
             /*    if (post.getToWho().equals( Code.SCUOLA)){
                     clientController.listView.setCellFactory(param -> new ListCell<String>(){
@@ -287,5 +293,12 @@ public class ClientMain extends Application {
 
             }
         });
+    }
+    public void sendReport(String msg){
+        Reporting report= new Reporting(msg, prefs.getUser());
+        Gson gson= new Gson();
+        String repo= gson.toJson(report);
+        clientBoss.sendReport(repo);
+        System.out.println("IL report: "+report.getUser().getNickname()+" "+report.getMsg());
     }
 }

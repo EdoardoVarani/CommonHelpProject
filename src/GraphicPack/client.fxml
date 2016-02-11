@@ -18,33 +18,85 @@
         <content>
             <BorderPane>
                <center>
-                  <Pane>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
                      <children>
-                        <Label id="connStateLabel" layoutX="219.0" layoutY="43.0" text="Connection state:" textFill="BLACK" />
-                        <JFXButton fx:id="clientConnectButton" layoutX="16.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#connectNow" styleClass="button-raised" text="Connect do EdoServer" />
-                        <JFXButton fx:id="loginButton" layoutX="369.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#loginNow" styleClass="button-raised" text="LOGIN" />
-                        <JFXButton fx:id="registerButton" layoutX="359.0" layoutY="262.0" mnemonicParsing="false" onMouseClicked="#registerAct" styleClass="button-raised" text="REGISTER" />
-                        <CheckBox fx:id="airplane" layoutX="104.0" layoutY="345.0" mnemonicParsing="false" onMouseClicked="#Aireplaine" text="AirPlane mode" />
-                        <Label fx:id="welcomeLabel" layoutX="10.0" layoutY="107.0" text="Ciao! Conettiti ed effettua il login!" />
-                        <Label fx:id="regLabel" layoutX="11.0" layoutY="265.0" text="In alternativa, puoi Iscriverti al servizio qui:" />
-                        <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="25.0" layoutY="329.0" pickOnBounds="true" preserveRatio="true">
+                        <JFXButton fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#loginNow" styleClass="button-raised" text="LOGIN" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <JFXButton fx:id="registerButton" mnemonicParsing="false" onMouseClicked="#registerAct" styleClass="button-raised" text="REGISTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                        <ImageView fitHeight="329.0" fitWidth="685.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@Images/1454877143_airplane1.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="connectionUP" fitHeight="49.0" fitWidth="57.0" layoutX="390.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                           <image>
-                              <Image url="@Images/1454878032_like.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="connectionDOWN" fitHeight="51.0" fitWidth="70.0" layoutX="379.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/1454878326_cloud-rejected.png" />
+                              <Image url="@Images/1.png" />
                            </image>
                         </ImageView>
                      </children>
-                  </Pane>
+                  </GridPane>
                </center>
+               <top>
+                  <GridPane prefHeight="119.0" prefWidth="629.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="421.0" minWidth="10.0" prefWidth="416.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="213.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="23.0" minHeight="9.0" prefHeight="11.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label id="connStateLabel" text="Connection state:" textAlignment="CENTER" textFill="BLACK" GridPane.halignment="CENTER">
+                           <GridPane.margin>
+                              <Insets top="20.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <JFXButton fx:id="clientConnectButton1" mnemonicParsing="false" onMouseClicked="#connectNow" prefHeight="59.0" prefWidth="142.0" styleClass="button-raised" text="Connect do EdoServer" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets top="50.0" />
+                           </GridPane.margin>
+                        </JFXButton>
+                        <ImageView fx:id="connectionUP" fitHeight="49.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                           <image>
+                              <Image url="@Images/1454878032_like.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets top="15.0" />
+                           </GridPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="connectionDOWN" fitHeight="51.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                           <image>
+                              <Image url="@Images/1454878326_cloud-rejected.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets top="20.0" />
+                           </GridPane.margin>
+                        </ImageView>
+                     </children>
+                  </GridPane>
+               </top>
+               <bottom>
+                  <GridPane prefHeight="104.0" prefWidth="629.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT">
+                           <image>
+                              <Image url="@Images/1454877569_airplane1.png" />
+                           </image>
+                        </ImageView>
+                        <CheckBox fx:id="airplane" mnemonicParsing="false" onMouseClicked="#airplaneNow" text="AirPlane mode" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+               </bottom>
             </BorderPane>
         </content>
       </Tab>
@@ -52,22 +104,25 @@
          <content>
             <BorderPane>
                <center>
-                  <SplitPane dividerPositions="0.7168674698795181" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+                  <SplitPane dividerPositions="0.6153846153846154" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
                     <items>
                         <ListView fx:id="listView" prefHeight="495.0" prefWidth="627.0" />
                         <GridPane prefHeight="192.0" prefWidth="627.0">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="437.0" minWidth="10.0" prefWidth="437.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="308.0" minWidth="10.0" prefWidth="190.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="604.0" minWidth="10.0" prefWidth="549.0" />
                           </columnConstraints>
                           <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="137.0" minHeight="10.0" prefHeight="116.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="137.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <JFXTextField GridPane.rowIndex="1" />
-                              <JFXButton prefHeight="39.0" prefWidth="179.0" styleClass="button-raised" text="INVIA" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <JFXButton fx:id="segnalazioneBtn" onMouseClicked="#segnalazioneNow" styleClass="button-raised" text="INVIA" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin></JFXButton>
                               <Label text="Puoi inviare la tua segnalazione qui:" GridPane.halignment="CENTER" />
+                              <JFXTextArea fx:id="segnalazioneText" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                     </items>
@@ -113,7 +168,7 @@
                         <JFXCheckBox fx:id="donazione_sangueBox" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                         <JFXCheckBox fx:id="anzianiBox" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
                         <JFXCheckBox fx:id="tasseBox" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                        <Label prefHeight="27.0" prefWidth="91.0" text="ScuolaBox" GridPane.columnIndex="1" />
+                        <Label prefHeight="27.0" prefWidth="91.0" text="Scuola" GridPane.columnIndex="1" />
                         <JFXCheckBox fx:id="scuolaBox" alignment="TOP_LEFT" contentDisplay="RIGHT" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                         <Label prefHeight="27.0" prefWidth="243.0" text="Making" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label prefHeight="27.0" prefWidth="226.0" text="Religione" GridPane.columnIndex="1" GridPane.rowIndex="2" />
