@@ -21,8 +21,8 @@ import java.net.Socket;
 public class ClientBoss extends Thread {
     private Socket clientSocket;
     private ClientMain clientMain;
-    private BufferedReader bufReader;
-    private PrintWriter buffWriter;
+    private BufferedReader read;
+    private PrintWriter write;
     private String letto;
     private Gson gson;
     private Signals sig;
@@ -38,8 +38,8 @@ public class ClientBoss extends Thread {
     }
     public void run(){
         try {
-            bufReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            buffWriter = new PrintWriter(this.clientSocket.getOutputStream(),true);
+            read = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            write = new PrintWriter(this.clientSocket.getOutputStream(),true);
             running=true;
             System.out.println("clientboss running and buffers online.");
             clientMain.changeUPDOWNStatus(running);
@@ -47,7 +47,7 @@ public class ClientBoss extends Thread {
 
         while (running){ //TODO: usare un flag bool da aggiornare su risposta del server alla query per il nuovo utente
             try {
-                letto =bufReader.readLine();
+                letto = read.readLine();
                 System.out.println("ricevuto server message: "+letto);
                 Gson gson =new Gson();
                 /** Segnale a singolo parametro per le risposte secche: es. userOccupato, a dopio parametro per passaggi di dati.*/
@@ -96,7 +96,7 @@ public class ClientBoss extends Thread {
     public void send(String msg)
     {
         try {
-            buffWriter.println(msg);
+            write.println(msg);
             System.out.println("sended to server: "+msg);
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,7 +107,7 @@ public class ClientBoss extends Thread {
         Signals sig = new Signals(Code.AIRPLANESETTED ,airp); //wrap in json
         Gson gson = new Gson();
         String json = gson.toJson(sig);
-        buffWriter.println(json);
+        write.println(json);
 
     }
 
@@ -115,7 +115,7 @@ public class ClientBoss extends Thread {
         Signals sig = new Signals(Code.UPDATEPREFS, prefs);
         Gson gson = new Gson();
         String json = gson.toJson(sig);
-        buffWriter.println(json);
+        write.println(json);
     }
 
 
@@ -125,13 +125,13 @@ public class ClientBoss extends Thread {
         Gson gson = new Gson();
         String json = gson.toJson(sig);
        // System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
-        buffWriter.println(json);
+        write.println(json);
     }
     public void sendToServerForLogin(String user){
         Signals sig = new Signals(Code.USERTOLOGIN, user);
         Gson gson = new Gson();
         String json= gson.toJson(sig);
-        buffWriter.println(json);
+        write.println(json);
     }
     boolean isNicknameAlredyTaked(String nickname){
         Signals sig = new Signals(Code.CHECKIFNICKAMETAKED, nickname);
@@ -142,7 +142,7 @@ public class ClientBoss extends Thread {
         Signals sig= new Signals(Code.SENDREPOTOSERVER,jRepo);
         Gson gson = new Gson();
         String json = gson.toJson(sig);
-        buffWriter.println(json);
+        write.println(json);
     }
     public User getUser() {
         return user;

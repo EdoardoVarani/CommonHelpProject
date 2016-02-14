@@ -54,8 +54,11 @@ public class ServerController implements Initializable{
 
     @FXML private void sendToClients(){
         System.out.println("SENDTOCLIENTS PRESSED");
-        serverMain.sendToClients(textAll.getText(), choiceSelect.getValue(), titleText.getText());
-
+        if (choiceSelect.getValue() != null) {
+            serverMain.sendToClients(textAll.getText(), choiceSelect.getValue(), titleText.getText());
+        } else {
+            System.err.println("NESSUNA PREFERENZA!");
+        }
     }
     @FXML public void connectNow(){ //Start the Server.
         serverMain.creaServer();

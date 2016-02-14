@@ -28,8 +28,10 @@ public class ClientController {
     Label welcomeLabel, regLabel;
     @FXML
     JFXButton prefSendButton, segnalazioneBtn;
+    @FXML JFXButton clientConnectButton;
     @FXML
     JFXTextArea segnalazioneText;
+    @FXML JFXTabPane tabbone;
 
 
     @FXML
@@ -47,13 +49,12 @@ public class ClientController {
 
     @FXML CheckBox airplane;
     @FXML private void airplaneNow(){
-       airplane.isSelected();
+        airplane.isSelected();
         clientMain.airplaneChanged(airplane.isSelected());
     }
 
     //EVENT LISTENERS
     @FXML  private void connectNow(){ //connect to main server
-
         clientMain.creaClient();
     }
     @FXML private void loginNow(){
@@ -64,33 +65,27 @@ public class ClientController {
     }
 
     @FXML private void sendText(){
-
         System.out.println("SENDDDDD");
-if (!textToSend.getText().equalsIgnoreCase("")){
-        clientMain.sendMessageToServer(textToSend.getText());
-}
+        if (!textToSend.getText().equalsIgnoreCase("")){
+            clientMain.sendMessageToServer(textToSend.getText());
+        }
     }
     public void setMain(ClientMain main){
         this.clientMain=main;
-
     }
 
     @FXML private void changePrefs(){
-        System.out.println("Premuto changeprefs");
-
-
         clientMain.updatePrefences(scuolaBox.isSelected(), makingBox.isSelected(),
                 religioneBox.isSelected(),
                 promozione_territorioBox.isSelected(),donazione_sangueBox.isSelected(),
                 anzianiBox.isSelected(),tasseBox.isSelected());//nlabla.isSelected...
-        //TODO: senda le preferences al server
-              }
+        System.out.println("PREFERENZE INVIATE");
+    }
 
     public void launchToMessagging(){
 
         System.out.println("in launchtomessaging");
         SingleSelectionModel<Tab> selectionModel = clientTab.getSelectionModel();
-//        SingleSelectionModel<Tab> selectionModel =clientTab.getSelectionModel();
         selectionModel.select(1); // select by index starting with 0
     }
 

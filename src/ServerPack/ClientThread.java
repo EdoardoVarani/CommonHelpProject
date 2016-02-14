@@ -136,8 +136,6 @@ public class ClientThread extends Thread {
                             System.out.println("USR TO LOGIN: "+usrTologin.getNickname());
                             try {
                                 checked="";
-
-
                                 rs = stat.executeQuery("SELECT nickname FROM utente WHERE nickname='"+usrTologin.getNickname()+"' AND password='"+usrTologin.getPassword()+"'");
                                 while (rs.next()){
                                     checked = rs.getString("nickname");

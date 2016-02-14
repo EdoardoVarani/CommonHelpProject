@@ -34,9 +34,8 @@ public class ServerMain extends Application {
        // Parent root=FXMLLoader.load(getClass().getResource("/ServerPack/server.fxml"));
         loader.setLocation(getClass().getResource("/GraphicPack/server.fxml"));
         Parent root=loader.load();
-
-        primaryStage.setTitle("EdoServer v.0.1");
-        primaryStage.setScene(new Scene(root, 400, 400));
+        primaryStage.setTitle("PUBBLICACOMUNICAZIONE-SERVER");
+        primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(400);
         serverController = loader.getController();
@@ -73,7 +72,7 @@ public class ServerMain extends Application {
     public void updateListView(Reporting repo){
        /* obsMsg.add("Segnalazione da: "+repo.getUser().getUsername()+" "+repo.getUser().getSurname()+"("
         +repo.getUser().getNickname()+") : "+repo.getMsg()); */ //TODO: VORREI USERNAME
-        obsMsg.add("Segnalazione da:"+repo.getUser().getNickname()+") : "+repo.getMsg());
+        obsMsg.add("Segnalazione da :"+repo.getUser().getNickname()+ ":"  +repo.getMsg());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

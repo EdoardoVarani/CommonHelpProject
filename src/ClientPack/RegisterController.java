@@ -21,12 +21,12 @@ public class RegisterController {
     @FXML
     JFXPasswordField passwordField;
     boolean nickFree;
+
     public void setNickFree(boolean nickFree) {
         this.nickFree = nickFree;
       /*  if (nickFree){
            freeUser.setText("UTENTE LIBERO, registrazione...");
         } */
-
     }
     private ClientMain clientMain;
 
@@ -41,7 +41,6 @@ public class RegisterController {
         System.out.println("nome:"+regName);
         System.out.println("cognome: "+regSurn);
        // isRegistering=true;
-
         clientMain.registerUser(regNick,regPwd,regName,regSurn);
     }
 

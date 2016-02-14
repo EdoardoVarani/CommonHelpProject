@@ -61,12 +61,42 @@
     -fx-pref-width: 200;
     -fx-text-fill: WHITE;
 }
+.button-raised:hover{
+    -fx-background-color: black;
+}
+
+.list-view{
+    -fx-background-color: #0891CC;
+}
+.jfx-text-area{
+    -fx-background-color: #0891CC;/*TODO: 00BCD4 */
+
+}
 .jfx-tab-pane .tab-header-area .jfx-rippler{
-    -fx-rippler-fill: #ff0000;
+    -fx-rippler-fill: #000000;
 }
 .tab{ /* COLORE DEI TABBINI */
     -fx-background-color: #15243C;
 }
+
 .jfx-tab-pane{
     -fx-background-color:  #0891CC;
+    -fx-font-family: Roboto-Black;
+}
+.jfx-check-box{
+    -fx-checked-color: black;
+    -fx-unchecked-color: #15243C;
+}
+#tabbone {
+    -fx-max-width: 400;
+    fx-font-family: Roboto;
+}
+.textArea .content{
+    -fx-background-color: #3ED8FF;
+}
+.logpane .content{
+    -fx-background-color: #0891CC;
+}
+.textF{
+    -fx-background-color: #3ED8FF;
 }
