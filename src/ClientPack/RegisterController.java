@@ -1,5 +1,6 @@
 package ClientPack;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -21,6 +22,8 @@ public class RegisterController {
     @FXML
     JFXPasswordField passwordField;
     boolean nickFree;
+    @FXML
+    JFXButton registerButton;
 
     public void setNickFree(boolean nickFree) {
         this.nickFree = nickFree;

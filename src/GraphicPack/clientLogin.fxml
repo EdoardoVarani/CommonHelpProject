@@ -5,10 +5,10 @@
 <?import com.jfoenix.controls.*?>
 <?import java.lang.*?>
 
-<AnchorPane id="logPane" maxHeight="300.0" maxWidth="255.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="255.0" style="-fx-background-color: #0891CC;" styleClass="logpane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientPack.LoginController">
+<AnchorPane id="logPane" maxHeight="300.0" maxWidth="255.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="255.0" style="-fx-background-color: #14E9FF;" styleClass="logpane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientPack.LoginController">
    <children>
-      <JFXTextField fx:id="nickLogin" layoutX="14.0" layoutY="76.0" style="-fx-background-color: #3ED8FF;" styleClass="textF" />
-      <JFXPasswordField fx:id="pwdLogin" layoutX="14.0" layoutY="134.0" style="-fx-background-color: #3ED8FF;" styleClass="textF" />
+      <JFXTextField fx:id="nickLogin" layoutX="14.0" layoutY="76.0" style="-fx-background-color: #14E9FF;" styleClass="textF" />
+      <JFXPasswordField fx:id="pwdLogin" layoutX="14.0" layoutY="134.0" style="-fx-background-color: #14E9FF;" styleClass="textF" />
       <JFXButton fx:id="loginNow" layoutX="26.0" layoutY="210.0" onMouseClicked="#loginClicked" styleClass="button-raised" stylesheets="@clientStyle.css" text="LOGIN" />
       <Label fx:id="loginText" layoutX="18.0" layoutY="29.0" text="Login using your Nickname" />
    </children>

@@ -11,33 +11,33 @@ import java.net.Socket;
 public class ConnectedClient {
 
     //ATTRIBUTES
-    private ClientThread clientThread;
+    private ServerThread serverThread;
     private Socket clientSocket;
     private User user=null;
 
     //CONSTRUCTORS
-    public ConnectedClient(ClientThread clientThread, Socket clientSocket){
-        this.clientThread=clientThread;
+    public ConnectedClient(ServerThread serverThread, Socket clientSocket){
+        this.serverThread = serverThread;
         this.clientSocket=clientSocket;
         //Non posso inizializzare l'usr perchè me lo deve comunicare via buffer
     }
 
 
     public void sendmsg(Post post){
-        clientThread.send(post);
+        serverThread.send(post);
     }
     public  boolean getAirplane(){
-       return clientThread.getAirplane();
+       return serverThread.getAirplane();
     }
 
     //GETTERS & SETTERS
 
-    public ClientThread getClientThread() {
-        return clientThread;
+    public ServerThread getServerThread() {
+        return serverThread;
     }
 
-    public void setClientThread(ClientThread clientThread) {
-        this.clientThread = clientThread;
+    public void setServerThread(ServerThread serverThread) {
+        this.serverThread = serverThread;
     }
 
     public Socket getClientSocket() {

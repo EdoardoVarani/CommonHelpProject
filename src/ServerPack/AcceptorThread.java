@@ -22,7 +22,6 @@ public class AcceptorThread extends Thread {
         this.serverSocket=serverSocket;
         this.serverMain=serverMain;
     }
-
     @Override
     public void run() {
         while (true) {
@@ -30,9 +29,8 @@ public class AcceptorThread extends Thread {
             try {
                 Socket socket = serverSocket.accept();//Establish a Socket conection with client;
                 System.out.println("connection accepted from :" + socket);
-               // connectedClients.add(new ConnectedClient(new ClientThread(socket,this.connectedClients.get(connectedClients.size()-1)),socket)); //add to my mapped connected clients;
-                  connectedClients.add(new ConnectedClient(new ClientThread(socket,this, serverMain),socket));
-                   connectedClients.get(connectedClients.size()-1).getClientThread().start(); //start single ClientThread
+                  connectedClients.add(new ConnectedClient(new ServerThread(socket,this, serverMain),socket));
+                   connectedClients.get(connectedClients.size()-1).getServerThread().start(); //start single ServerThread
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -45,7 +43,7 @@ public class AcceptorThread extends Thread {
                 System.out.println("messaggio scolastico");
                 Post post= new Post(Code.SCUOLA,title,msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isScuola() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isScuola() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -54,7 +52,7 @@ public class AcceptorThread extends Thread {
                 System.out.println("Messaggio per i makers");
                 Post post= new Post(Code.MAKING,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isMaking() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isMaking() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -64,7 +62,7 @@ public class AcceptorThread extends Thread {
                 System.out.println("Messaggio per i religiosi");
                 Post post= new Post(Code.RELIGIONE,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isReligione() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isReligione() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -73,7 +71,7 @@ public class AcceptorThread extends Thread {
             case ("Attività locali"):{
                 Post post= new Post(Code.PROMOZIONE_TERRITORIO,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isPromozione_territorio() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isPromozione_territorio() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -81,7 +79,7 @@ public class AcceptorThread extends Thread {
             case ("Donazioni sangue"):{
                 Post post= new Post(Code.DONAZIONE_SANGUE,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isDonazione_sangue() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isDonazione_sangue() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -89,7 +87,7 @@ public class AcceptorThread extends Thread {
             case ("Anziani"):{
                 Post post= new Post(Code.ANZIANI,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isAnziani() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isAnziani() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -97,7 +95,7 @@ public class AcceptorThread extends Thread {
             case ("Tasse"):{
                 Post post= new Post(Code.TASSE,title, msg);
                 for (int i=0; i<connectedClients.size(); i++) {
-                    if (connectedClients.get(i).getClientThread().getPrefs().isTasse() && !connectedClients.get(i).getClientThread().getAirplane()){
+                    if (connectedClients.get(i).getServerThread().getPrefs().isTasse() && !connectedClients.get(i).getServerThread().getAirplane()){
                         connectedClients.get(i).sendmsg(post);
                     }
                 }
@@ -106,8 +104,8 @@ public class AcceptorThread extends Thread {
         System.out.println(toWho);
 /*
         for (int i=0; i<connectedClients.size(); i++) {
-            System.out.println(connectedClients.get(i).getClientThread().getUser().getNickname()); //TODO: ;)
-            System.out.println(connectedClients.get(i).getClientThread().getPrefs().);
+            System.out.println(connectedClients.get(i).getServerThread().getUser().getNickname()); //TODO: ;)
+            System.out.println(connectedClients.get(i).getServerThread().getPrefs().);
             if (!connectedClients.get(i).getAirplane()) { //
                 connectedClients.get(i).sendmsg(msg);
             }
@@ -116,7 +114,7 @@ public class AcceptorThread extends Thread {
 
    /* public void sendToNotAirplane(String msg){
         for (int i=0;i<connectedClients.size()-1;i++){
-          if (connectedClients.get(i).getClientThread().getAirplane()==false){
+          if (connectedClients.get(i).getServerThread().getAirplane()==false){
            connectedClients.get(i).sendmsg(msg);
            }
         }

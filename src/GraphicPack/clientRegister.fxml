@@ -5,17 +5,17 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientPack.RegisterController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="249.0" style="-fx-background-color: #14E9FF;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClientPack.RegisterController">
    <children>
-      <Label layoutX="79.0" layoutY="14.0" text="Nickname" />
-      <Label layoutX="75.0" layoutY="94.0" text="Password" />
-      <Label layoutX="95.0" layoutY="159.0" text="Nome" />
-      <Label layoutX="87.0" layoutY="232.0" text="Cognome" />
-      <Button fx:id="registerButton" layoutX="74.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#registerNow" text="Register" />
+      <Label layoutX="85.0" layoutY="21.0" text="Nickname" />
+      <Label layoutX="87.0" layoutY="94.0" text="Password" />
+      <Label layoutX="101.0" layoutY="166.0" text="Nome" />
+      <Label layoutX="87.0" layoutY="237.0" text="Cognome" />
       <Label fx:id="freeUser" layoutX="279.0" layoutY="259.0" />
       <JFXTextField fx:id="nicknameField" layoutX="14.0" layoutY="41.0" />
-      <JFXPasswordField fx:id="passwordField" layoutX="14.0" layoutY="108.0" />
-      <JFXTextField fx:id="nameField" layoutX="7.0" layoutY="190.0" />
-      <JFXTextField fx:id="surnameField" layoutX="7.0" layoutY="264.0" />
+      <JFXPasswordField fx:id="passwordField" layoutX="13.0" layoutY="121.0" />
+      <JFXTextField fx:id="nameField" layoutX="14.0" layoutY="186.0" />
+      <JFXTextField fx:id="surnameField" layoutX="14.0" layoutY="264.0" />
+      <JFXButton fx:id="registerButton" layoutX="25.0" layoutY="341.0" onMouseClicked="#registerNow" styleClass="button-raised" stylesheets="@clientStyle.css" text="Registrati" />
    </children>
 </Pane>

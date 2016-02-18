@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 public class ServerController implements Initializable{
 
     private boolean isConnected=false;
-    private int port=4321;
     private  ServerMain serverMain;
 
     @FXML

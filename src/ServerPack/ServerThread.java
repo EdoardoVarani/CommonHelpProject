@@ -5,7 +5,7 @@ import ComunicationPack.Post;
 import ComunicationPack.Reporting;
 import ComunicationPack.Signals;
 import UserPack.Preferences;
-import UserPack.SecurityClass;
+import UserPack.PrivateClass;
 import UserPack.User;
 import com.google.gson.Gson;
 
@@ -20,7 +20,7 @@ import java.sql.*;
  * Created by edoar on 11/01/2016.
  */
 /** IL SERVER GESTISCE IL SINGOLO CLIENT CONNESSO IN QUESTO THREAD*/
-public class ClientThread extends Thread {
+public class ServerThread extends Thread {
 
     private Socket socket;
     private BufferedReader in;
@@ -40,7 +40,7 @@ public class ClientThread extends Thread {
     private AcceptorThread acceptorThread;
 
     //CONSTRUCTOR
-    public ClientThread(Socket clientSocket, AcceptorThread acceptorThread, ServerMain serverMain) {
+    public ServerThread(Socket clientSocket, AcceptorThread acceptorThread, ServerMain serverMain) {
         this.socket = clientSocket;
 
         this.acceptorThread=acceptorThread;
@@ -54,7 +54,7 @@ public class ClientThread extends Thread {
             String url ="jdbc:mysql://localhost:3307/pubblicacomunicazione?useSSL=false"; //url for jdbc connection
             String dbUSR ="root";
             Class.forName(driver).newInstance();
-            conn = DriverManager.getConnection(url, dbUSR, SecurityClass.DBPASS);//Mysql password masked by SecurityClass
+            conn = DriverManager.getConnection(url, dbUSR, PrivateClass.DBPASS);//Mysql password masked by PrivateClass
             stat = conn.createStatement();
         } catch (Exception e) {
             System.out.println(e);
@@ -64,9 +64,8 @@ public class ClientThread extends Thread {
                 while ((line=in.readLine()) != null) //Read from InputStream (Client OutputStream)
                 {
                     System.out.println(line+ " on socket:"+socket);
-
                     ResultSet rs=null;
-                    stat = conn.createStatement();
+                   // stat = conn.createStatement();
                     Gson gson =new Gson();
                     sig=gson.fromJson(line, Signals.class);
                     System.out.println("CODICE: "+sig.getCode());
@@ -79,7 +78,6 @@ public class ClientThread extends Thread {
 
                             /** INTERROGA IL DATABASE: C'è GIà UN USER CON QUEL NOME? */
                             try {
-
                                 rs= stat.executeQuery("SELECT nickname FROM utente WHERE nickname ='"+nameToCheck+"'"); //CHECK DB FOR FREE NICKNAME
                                 while (rs.next()){
                                     checked = rs.getString("nickname");
@@ -146,7 +144,6 @@ public class ClientThread extends Thread {
 
                                     System.out.println("Sto per eseguire la query. user= "+user.getNickname());
                                     ResultSet resultSet= stat.executeQuery("SELECT * FROM utente JOIN preferenze ON utente.nickname = preferenze.nickname WHERE preferenze.nickname='"+user.getNickname()+"'");
-
                                     prefs = new Preferences();
                                     prefs.setUser(user);
                                     while (resultSet.next()){
@@ -201,7 +198,7 @@ public class ClientThread extends Thread {
         }
     }
 
-    public void send(Post post){
+    public void send(Post post){ //Serializza il post, serializza il segnale, lo invia al client.
 
         Gson gpost= new Gson();
         String serpost= gpost.toJson(post);

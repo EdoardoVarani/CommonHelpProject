@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Separator;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,12 +25,9 @@ public class ServerMain extends Application {
     private ObservableList<String> obsMsg= FXCollections.observableArrayList();;
 
 
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //Parent root = FXMLLoader.load(getClass().getResource("/socketserverfx/server.fxml"));
         FXMLLoader loader = new FXMLLoader();
-       // Parent root=FXMLLoader.load(getClass().getResource("/ServerPack/server.fxml"));
         loader.setLocation(getClass().getResource("/GraphicPack/server.fxml"));
         Parent root=loader.load();
         primaryStage.setTitle("PUBBLICACOMUNICAZIONE-SERVER");
@@ -41,14 +37,7 @@ public class ServerMain extends Application {
         serverController = loader.getController();
         serverController.setMain(this);
         primaryStage.show();
-       // serverController.comboSelect.requestFocus();
-      //  serverController.setData();
-       /* final ComboBox<String> comboSelect = new ComboBox<ObservableArray>();
-        comboSelect.getItems().addAll("PRIMO", "SECONDO", "TERZO");
-        comboSelect.setValue("PRIMO");
-        System.out.println(comboSelect.getValue());
 
-*/
 
     }
 
@@ -70,15 +59,15 @@ public class ServerMain extends Application {
     }
 
     public void updateListView(Reporting repo){
-       /* obsMsg.add("Segnalazione da: "+repo.getUser().getUsername()+" "+repo.getUser().getSurname()+"("
-        +repo.getUser().getNickname()+") : "+repo.getMsg()); */ //TODO: VORREI USERNAME
-        obsMsg.add("Segnalazione da :"+repo.getUser().getNickname()+ ":"  +repo.getMsg());
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                obsMsg.add("Segnalazione da "+repo.getUser().getNickname()+ ": "  +repo.getMsg()+System.lineSeparator());
                 serverController.listView.setItems(obsMsg);
                 serverController.listView.scrollTo(obsMsg);
-                serverController.listView.setItems((ObservableList) new Separator());
+               // serverController.listView.setItems((ObservableList) new Separator());
+              //  serverController.listView.setItems((ObservableList) new Separator());
             }
         });
 

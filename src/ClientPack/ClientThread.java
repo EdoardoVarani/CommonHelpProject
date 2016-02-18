@@ -18,7 +18,7 @@ import java.net.Socket;
  */
 
 
-public class ClientBoss extends Thread {
+public class ClientThread extends Thread {
     private Socket clientSocket;
     private ClientMain clientMain;
     private BufferedReader read;
@@ -31,7 +31,7 @@ public class ClientBoss extends Thread {
     private boolean running;
     private User user;
 
-    public ClientBoss(Socket clientSocket, ClientMain clientMain){
+    public ClientThread(Socket clientSocket, ClientMain clientMain){
         this.clientSocket=clientSocket;
         this.clientMain=clientMain;
 
@@ -41,7 +41,7 @@ public class ClientBoss extends Thread {
             read = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             write = new PrintWriter(this.clientSocket.getOutputStream(),true);
             running=true;
-            System.out.println("clientboss running and buffers online.");
+            System.out.println("ClientThread running and buffers online.");
             clientMain.changeUPDOWNStatus(running);
         } catch (Exception e){e.printStackTrace();}
 
@@ -120,13 +120,12 @@ public class ClientBoss extends Thread {
 
 
     public void sendToServerForRegistration(String user){
-
         Signals sig = new Signals(Code.USERTOREGISTRATE, user);
         Gson gson = new Gson();
         String json = gson.toJson(sig);
-       // System.out.println("from clientBoss: " +user.getUsername()+user.getPassword());
         write.println(json);
     }
+
     public void sendToServerForLogin(String user){
         Signals sig = new Signals(Code.USERTOLOGIN, user);
         Gson gson = new Gson();

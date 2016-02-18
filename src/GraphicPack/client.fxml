@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
@@ -63,7 +64,10 @@
                               <Image url="@Images/on.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="welcomeLabel" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <Label fx:id="welcomeLabel" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="24.0" />
+                           </font></Label>
                      </children>
                   </GridPane>
                </top>
@@ -213,7 +217,7 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Iscriviti ai canali che preferisci,riceverai solo le comunicazioni che ti interessano">
+                        <Label text="Iscriviti ai canali che preferisci,riceverai solo le comunicazioni che ti interessano" textAlignment="CENTER" GridPane.halignment="CENTER">
                            <GridPane.margin>
                               <Insets bottom="15.0" top="5.0" />
                            </GridPane.margin>

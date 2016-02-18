@@ -73,7 +73,7 @@
 
 }
 .jfx-tab-pane .tab-header-area .jfx-rippler{
-    -fx-rippler-fill: #000000;
+    -fx-rippler-fill: white;
 }
 .tab{ /* COLORE DEI TABBINI */
     -fx-background-color: #15243C;

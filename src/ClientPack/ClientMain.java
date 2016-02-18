@@ -38,7 +38,7 @@ public class ClientMain extends Application {
     private Socket clientSocket;
     private Integer port =4321;
     private String hostname ="localhost";
-    private ClientBoss clientBoss;
+    private ClientThread clientThread;
     //Clients
     private boolean isNicknameFree=false;
     private boolean isClientLogged=false;
@@ -77,14 +77,14 @@ public class ClientMain extends Application {
         clientController.clientTab.setMinWidth(400); */ //TODO: NON VA
     }
 
-    public void creaClient(){ //
+    public void creaClient(){
         try {
             clientSocket = new Socket(hostname, port);  //ISTANZIO CLIENT SOCKET
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clientBoss = new ClientBoss(clientSocket,this); //nuovo clientBoss, gli passo il client socket e il client main
-        clientBoss.start();
+        clientThread = new ClientThread(clientSocket,this); //nuovo clientThread, gli passo il client socket e il client main
+        clientThread.start();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -106,7 +106,7 @@ public class ClientMain extends Application {
 
     public void sendMessageToServer(String msg){
         try {
-           clientBoss.send(msg);
+           clientThread.send(msg);
         } catch (Exception e) {e.printStackTrace();}
 
     }
@@ -117,22 +117,22 @@ public class ClientMain extends Application {
     public void airplaneChanged(boolean airplane){
         Gson gson = new Gson();
         String json = gson.toJson(airplane);
-        clientBoss.airplaneChanged(json);
+        clientThread.airplaneChanged(json);
     }
     public void registerUser(String nickname, String password, String name, String surname){
 
         User user = new User(nickname,password, name, surname);
         Gson gson= new Gson();
         String json = gson.toJson(user);//impacchetto user
-        clientBoss.sendToServerForRegistration(json);
+        clientThread.sendToServerForRegistration(json);
     }
 
     public void loginUser(String nickname, String password){
         User user= new User(nickname,password); //LOGGING_USER
         Gson gson= new Gson();
         String json = gson.toJson(user);
-        clientBoss.sendToServerForLogin(json);
-      //  clientBoss.sendToServerForRegistration(json);
+        clientThread.sendToServerForLogin(json);
+      //  clientThread.sendToServerForRegistration(json);
     }
 
     public void createRegisterScreen() {
@@ -147,7 +147,7 @@ public class ClientMain extends Application {
         registerStage = new Stage();
         registerStage.setTitle("EdoClient");
         // primaryStage.getIcons().add(new Image("/Images/server.png"));
-        registerStage.setScene(new Scene(root, 500, 500));
+        registerStage.setScene(new Scene(root, 249, 400));
         registerController = loader.getController();
         registerController.setMain(this);
         registerStage.show();
@@ -178,11 +178,11 @@ public class ClientMain extends Application {
 
         prefs= new Preferences(scuola,making,religione,promozione_territorio,donazione_sangue,
                 anziani,tasse);
-        prefs.setUser(clientBoss.getUser());
+        prefs.setUser(clientThread.getUser());
        // System.err.println("UTENTE: "+prefs.getUser().getUsername()+prefs.getUser().getSurname());//TODO: non ho username etc
         Gson gson= new Gson();
         String json= gson.toJson(prefs);
-        clientBoss.updatePrefs(json);
+        clientThread.updatePrefs(json);
 
 
     }
@@ -202,8 +202,8 @@ public class ClientMain extends Application {
                     registerStage.hide();
                     registerStage.close();
                   //  clientController.launchToMessagging();
-                    clientController.clientConnectButton.setVisible(true);
-                    clientController.welcomeLabel.setText("Benvenuto,"+clientBoss.getUser().getNickname()+"!");
+                    clientController.clientConnectButton.setVisible(false);
+                    clientController.welcomeLabel.setText("Benvenuto,"+ clientThread.getUser().getNickname()+"!");
                     clientController.registerButton.setVisible(false);
                     clientController.registerButton.setDisable(true);
                 }
@@ -246,7 +246,7 @@ public class ClientMain extends Application {
 
         Gson gs= new Gson();
         prefs =gs.fromJson(serPrefs, Preferences.class);
-        clientBoss.setUser(prefs.getUser());
+        clientThread.setUser(prefs.getUser());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -264,7 +264,6 @@ public class ClientMain extends Application {
                 clientController.clientConnectButton.setVisible(false);
                 clientController.welcomeLabel.setFont(robo);
                 clientController.welcomeLabel.setText("Bentornato, "+prefs.getUser().getNickname()+"!");
-
                 clientController.scuolaBox.setSelected(prefs.isScuola());
                 clientController.makingBox.setSelected(prefs.isMaking());
                 clientController.religioneBox.setSelected(prefs.isReligione());
@@ -280,7 +279,6 @@ public class ClientMain extends Application {
       // Image img= new Image(getClass().getClassLoader().getResource("CommonHelp/GrapghicPack/Images/teacher44.png").toString());
 //TODO: IMMAGINI CATEGORIA NELLA NOTIFICA
         Platform.runLater(new Runnable() {
-
             @Override
             public void run() {
                 NotificationType type = NotificationType.NOTICE;
@@ -292,13 +290,13 @@ public class ClientMain extends Application {
                 } else trayNotification.setMessage(post.getMessage());
                 trayNotification.showAndDismiss(Duration.seconds(5));
 
-                obsMsg.add("Titolo: "+post.getTitle()+System.lineSeparator()+"Post: "+post.getMessage());
+                obsMsg.add(System.lineSeparator()+"Titolo: "+post.getTitle()+System.lineSeparator()+"Post: "+post.getMessage()+System.lineSeparator());
                 clientController.listView.setItems(obsMsg);
                 clientController.listView.scrollTo(obsMsg);
                // clientController.listView.setItems((ObservableList) new Separator());
                 System.out.println(obsMsg);
             /*    if (post.getToWho().equals( Code.SCUOLA)){
-                    clientController.listView.setCellFactory(param -> new ListCell<String>(){
+                    clientController.listView.setCellFactory(param - > new ListCell<String>(){
                         private ImageView imgView= new ImageView();
 
                         @Override
@@ -317,7 +315,7 @@ public class ClientMain extends Application {
         Reporting report= new Reporting(msg, prefs.getUser());
         Gson gson= new Gson();
         String repo= gson.toJson(report);
-        clientBoss.sendReport(repo);
+        clientThread.sendReport(repo);
         System.out.println("IL report: "+report.getUser().getNickname()+" "+report.getMsg());
     }
 }

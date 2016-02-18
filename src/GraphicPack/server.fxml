@@ -94,10 +94,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXButton fx:id="sendButton" mnemonicParsing="false" onMouseClicked="#sendToClients" prefHeight="38.0" styleClass="button-raised" text="Shout to all" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-                           <padding>
-                              <Insets bottom="15.0" />
-                           </padding>
+                        <JFXButton fx:id="sendButton" mnemonicParsing="false" onMouseClicked="#sendToClients" prefHeight="70.0" styleClass="button-raised" text="Invia il Post" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                            <GridPane.margin>
                               <Insets bottom="15.0" />
                            </GridPane.margin>
